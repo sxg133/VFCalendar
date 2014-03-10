@@ -76,7 +76,7 @@ The *CalendarHandler* constructor accepts an instance of the *ICalendarItemRetri
 				AND EndDateTime <= :endDate
 			]);
 		for (Event e : events) {
-			CalendarItem calItem = createCalendarItem(e);
+			CalendarItem calItem = createCalendarItem(e.Id);
         	calItem.Description = e.Description;
     		calItem.StartDateTime = e.StartDateTime;
     		calItem.EndDateTime = e.EndDateTime;
@@ -108,7 +108,11 @@ When creating a custom action, you may set or add to the *Actions* property of t
 				AND EndDateTime <= :endDate
 			]);
 		for (Event e : events) {
-			CalendarItem calItem = createCalendarItem(e);
+			CalendarItem calItem = createCalendarItem(e.Id);
+        	calItem.Description = e.Description;
+    		calItem.StartDateTime = e.StartDateTime;
+    		calItem.EndDateTime = e.EndDateTime;
+    		calItem.IsAllDay = e.IsAllDayEvent;
 			calItem.Actions.add( new SwitchCalendarItemTypeAction(calItem) );
 			calendarItems.add(calItem);
 		}
