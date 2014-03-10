@@ -52,25 +52,28 @@
 			padding: 3px;
 		}
 
-		.calendar-day {
+		.calendar-day-cell {
 			border: solid 1px #DDDDDD;
-			height: 100px;
 			margin: 0;
 			width: 14%;
 			overflow: hidden;
 		}
 
-		.calendar-day.selected-month .calendar-date-number {
+		.calendar-day-cell > .calendar-day {
+			height: 100px;
+		}
+
+		.calendar-day-cell.selected-month .calendar-date-number {
 			color: #000000;
 		}
 
-		.calendar-day.today {
+		.calendar-day-cell.today {
 			background-color: #F2F2F2;
 			border: double 1px #000000;
 			z-index: 1;
 		}
 
-		.calendar-day.today .calendar-date-number {
+		.calendar-day-cell.today .calendar-date-number {
 			font-weight: bold;
 		}
 
@@ -212,18 +215,20 @@
 						<apex:repeat value="{!cal.Weeks}" var="week">
 							<tr class="calendar-row">
 								<apex:repeat value="{!week.Days}" var="day">
-									<td class="calendar-day {!IF(day.CalendarDate == TODAY(), 'today', '')} {!IF(MONTH(day.CalendarDate) == MONTH(cal.ActiveDate), 'selected-month', '')}">
-										<div class="calendar-date-number">
-											<apex:outputText value="{0,date,d}">
-												<apex:param value="{!day.CalendarDate}" />
-											</apex:outputText>
-										</div>
-										<div class="calendar-item-container">
-											<apex:repeat value="{!day.Items}" var="calItem">
-												<div class="calendar-item {!HTMLENCODE(calItem.CssClass)}" onclick="calendarClient.calendarItemClicked(event, '{!calItem.ItemId}');">
-													<apex:outputText value="{!calItem.Name}" />
-												</div>
-											</apex:repeat>
+									<td class="calendar-day-cell {!IF(day.CalendarDate == TODAY(), 'today', '')} {!IF(MONTH(day.CalendarDate) == MONTH(cal.ActiveDate), 'selected-month', '')}">
+										<div class="calendar-day">
+											<div class="calendar-date-number">
+												<apex:outputText value="{0,date,d}">
+													<apex:param value="{!day.CalendarDate}" />
+												</apex:outputText>
+											</div>
+											<div class="calendar-item-container">
+												<apex:repeat value="{!day.Items}" var="calItem">
+													<div class="calendar-item {!HTMLENCODE(calItem.CssClass)}" onclick="calendarClient.calendarItemClicked(event, '{!calItem.ItemId}');">
+														<apex:outputText value="{!calItem.Name}" />
+													</div>
+												</apex:repeat>
+											</div>
 										</div>
 									</td>
 								</apex:repeat>
