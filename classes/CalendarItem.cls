@@ -8,6 +8,7 @@ public with sharing virtual class CalendarItem {
 	public string ItemId {get; private set;}
 	public string Name {get; set;}
 	public string Description {get; set;}
+
 	public DateTime StartDateTime {
 		get {
 			return itemStartDateTime;
@@ -17,6 +18,25 @@ public with sharing virtual class CalendarItem {
 			itemStartDate = value.date();
 		}
 	}
+
+	public string FormattedStartDateTime {
+		get {
+			return StartDateTime.format('MMMM d, h:mm a');
+		}
+	}
+
+	public string FormattedStartDate {
+		get {
+			return StartDateTime.format('MMMM d');
+		}
+	}
+
+	public string FormattedStartTime {
+		get {
+			return StartDateTime.format('h:mm a');
+		}
+	}
+
 	public DateTime EndDateTime {
 		get {
 			return itemEndDateTime;
@@ -26,6 +46,25 @@ public with sharing virtual class CalendarItem {
 			itemEndDate = value.date();
 		}
 	}
+
+	public string FormattedEndDateTime {
+		get {
+			return EndDateTime.format('MMMM d, h:mm a');
+		}
+	}
+
+	public string FormattedEndDate {
+		get {
+			return EndDateTime.format('MMMM d');
+		}
+	}
+
+	public string FormattedEndTime {
+		get {
+			return EndDateTime.format('h:mm a');
+		}
+	}
+
 	public Date StartDate {
 		get {
 			return itemStartDate;
@@ -38,6 +77,7 @@ public with sharing virtual class CalendarItem {
 				);
 		}
 	}
+
 	public Date EndDate {
 		get {
 			return itemEndDate;
@@ -50,7 +90,9 @@ public with sharing virtual class CalendarItem {
 				);
 		}
 	}
+
 	public boolean IsAllDay {get; set;}
+
 	public double DurationInMinutes {
 		get {
 			if (this.IsAllDay) {
@@ -61,6 +103,7 @@ public with sharing virtual class CalendarItem {
 			throw new CalendarException('The duration cannot be calculated without start and end times.');
 		}
 	}
+
 	// The duration of the item as a percent of one 30 minute block
 	public double DurationPercent {
 		get {
@@ -70,6 +113,7 @@ public with sharing virtual class CalendarItem {
 			return Math.Ceil( (DurationInMinutes / 30) * 100 );
 		}
 	}
+
 	public List<ICalendarItemAction> Actions {get; set;}
 	public string CssClass {get; set;}
 	public string DetailUrl {get; set;}

@@ -267,17 +267,11 @@
 				<div class="calendar-line"></div>
 
 				<p>
-					<apex:outputText value="{0,date,E, MMMM d, h:mm a}">
-						<apex:param value="{!SelectedCalendarItem.StartDateTime}" />
-					</apex:outputText>
-					<apex:outputText value=" to {0,date,E, MMMM d, h:mm a}" 
-						rendered="{!SelectedCalendarItem.StartDate <> SelectedCalendarItem.EndDate}">
-						<apex:param value="{!SelectedCalendarItem.EndDateTime}" />
-					</apex:outputText>
-					<apex:outputText value=" to {0,date,h:mm a}" 
-						rendered="{!SelectedCalendarItem.StartDate == SelectedCalendarItem.EndDate}">
-						<apex:param value="{!SelectedCalendarItem.EndDateTime}" />
-					</apex:outputText>
+					<apex:outputText value="{!SelectedCalendarItem.FormattedStartDateTime}" />
+					<apex:outputText value=" to {!SelectedCalendarItem.FormattedEndDateTime}" 
+						rendered="{!SelectedCalendarItem.StartDate <> SelectedCalendarItem.EndDate}" />
+					<apex:outputText value=" to {!SelectedCalendarItem.FormattedEndTime}" 
+						rendered="{!SelectedCalendarItem.StartDate == SelectedCalendarItem.EndDate}" />
 				</p>
 
 				<p>
