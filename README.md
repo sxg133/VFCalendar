@@ -7,7 +7,7 @@ Date:   2014-03-05
 
 A calendar component for VisualForce pages
 
-[Calendar Month View](https://raw.github.com/sxg133/VFCalendar/master/calendar_week_view.png)
+[Calendar Month View](https://raw.github.com/sxg133/VFCalendar/master/calendar_month_view.png)
 
 Documentation
 =============
