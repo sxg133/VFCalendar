@@ -1,0 +1,17 @@
+<apex:page controller="CalendarExampleController">
+	
+	<style type="text/css">
+		.standard-event {
+			background-color: #FFA500;
+		}
+
+		.custom-event {
+			background-color: #9FB4F4;
+		}
+	</style>
+
+	<apex:form >
+		<c:CalendarDisplay params="{!calParams}" cal="{!cal}" />
+	</apex:form>
+
+</apex:page>

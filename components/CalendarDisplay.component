@@ -1,0 +1,468 @@
+<apex:component controller="CalendarDisplayController">
+	<apex:attribute name="params" description="The calendar parameters" type="CalendarParameters" required="true" />
+	<apex:attribute name="cal" description="The calendar to display" type="CalendarHandler" required="true" assignTo="{!CalHandler}" />
+
+	<style type="text/css">
+
+		.calendar-content {
+			width: 100%;
+		}
+
+		.calendar-header {
+			text-align: center;
+			margin: 20px 0;
+		}
+
+		.calendar-header input {
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+
+		.calendar-header > div {
+			margin: 12px 0;
+		}
+
+		.calendar-content h1 {
+			font-size: 14pt;
+		}
+
+		.calendar-content h2 {
+			font-size: 12pt;
+		}
+
+		.calendar-select-date {
+			width: 71px;
+			text-align: center;
+		}
+
+		/* month view */
+
+		.calendar-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.calendar-header-cell {
+			text-align: center;
+		}
+
+		.calendar-date-number {
+			text-align: left;
+			color: #ACACAC;
+			padding: 3px;
+		}
+
+		.calendar-day {
+			border: solid 1px #DDDDDD;
+			height: 100px;
+			margin: 0;
+			width: 14%;
+			overflow: hidden;
+		}
+
+		.calendar-day.selected-month .calendar-date-number {
+			color: #000000;
+		}
+
+		.calendar-day.today {
+			background-color: #F2F2F2;
+			border: double 1px #000000;
+			z-index: 1;
+		}
+
+		.calendar-day.today .calendar-date-number {
+			font-weight: bold;
+		}
+
+		.calendar-item-container {
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.calendar-item-container:hover {
+			overflow: auto;
+		}
+
+		.calendar-item {
+			padding: 3px 5px;
+		}
+
+		.calendar-item-popup {
+			max-width: 320px;
+			min-width: 200px;
+			border: solid 1px #B2B2B2;
+			padding: 5px;
+			position: fixed;
+			background-color: #FFFFFF;
+			border-radius: 2px;
+			box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1),inset -1px -1px 0 rgba(0, 0, 0, 0.07);
+		}
+
+		.calendar-item-popup .calendar-detail-link {
+			float: right;
+		}
+
+		.calendar-item-popup .calendar-line {
+			height: 1px;
+			background-color: #A5A5A5;
+			width: 100%;
+		}
+
+		.calendar-item-popup .calendar-action-container {
+			margin: 5px 0;
+		}
+
+		.calendar-item-popup .calendar-action-container div {
+			margin: 3px 0;
+		}
+
+		.calendar-arrow-down {
+			position: fixed;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-top: 10px solid #ffffff;
+		}
+
+		.calendar-arrow-up {
+			position: fixed;
+			border-left: 10px solid transparent;
+			border-right: 10px solid transparent;
+			border-bottom: 10px solid #ffffff;
+		}
+
+	</style>
+
+	<script type="text/javascript">
+
+		function setFocusOnLoad() {}	// hack to fix SFDC date picker focus issue
+
+	</script>
+
+	<apex:outputPanel layout="block" styleClass="calendar-content" id="calendarContent">
+
+		<apex:outputPanel layout="block" styleClass="calendar-header" id="calendarHeader">
+
+			<div>
+
+				<apex:commandButton value="<<" rendered="{!params.ShowNavigation}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousYear}" />
+
+				<apex:commandButton value="<" rendered="{!params.ShowNavigation}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousMonth}" />
+
+				<apex:outputPanel id="calendarTitle" styleClass="calendar-title" rendered="{!params.ShowHeader}">
+					<h1>
+						<apex:outputText value="{0,date,MMMM YYYY}">
+							<apex:param value="{!cal.ActiveDate}" />
+						</apex:outputText>
+					</h1>
+				</apex:outputPanel>
+
+				<apex:commandButton value=">" rendered="{!params.ShowNavigation}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextMonth}" />
+
+				<apex:commandButton value=">>" rendered="{!params.ShowNavigation}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextYear}" />
+
+			</div>
+
+			<div>
+
+				<apex:commandButton value="Today" action="{!goToToday}" 
+					rerender="calendarBody, calendarTitle, selectedDate" rendered="{!params.ShowNavigation}" />
+
+				<apex:outputPanel id="selectedDate">
+
+					<apex:inputText value="{!SelectedDate}" rendered="{!params.ShowNavigation}"
+						id="selectedDateInput" styleClass="calendar-select-date"
+						onfocus="DatePicker.pickDate(true, '{!$Component.selectedDateInput}', false);">
+						<apex:actionSupport action="{!setSelectedCalendarItem}" event="onchange"
+							rerender="calendarBody, calendarTitle" />
+					</apex:inputText>
+
+					<script type="text/javascript">
+						(function() {
+							if (typeof(calendarUtil) !== 'undefined') {
+								calendarUtil.fixDateInput('{!$Component.selectedDateInput}');
+							}
+						})();
+					</script>
+
+				</apex:outputPanel>
+
+			</div>
+
+		</apex:outputPanel>
+
+		<apex:outputPanel layout="block" styleClass="calendar-body" id="calendarBody">
+
+			<apex:outputPanel layout="block" styleClass="calendar-view month" id="calendarMonthView">
+			
+				<table class="calendar-table month" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr class="calendar-header-row">
+							<apex:repeat value="{!cal.WeekdayNames}" var="wd">
+								<th class="calendar-header-cell">
+									<apex:outputText value="{!wd}" />
+								</th>
+							</apex:repeat>
+						</tr>
+					</thead>
+					<tbody>
+						<apex:repeat value="{!cal.Weeks}" var="week">
+							<tr class="calendar-row">
+								<apex:repeat value="{!week.Days}" var="day">
+									<td class="calendar-day {!IF(day.CalendarDate == TODAY(), 'today', '')} {!IF(MONTH(day.CalendarDate) == MONTH(cal.ActiveDate), 'selected-month', '')}">
+										<div class="calendar-date-number">
+											<apex:outputText value="{0,date,d}">
+												<apex:param value="{!day.CalendarDate}" />
+											</apex:outputText>
+										</div>
+										<div class="calendar-item-container">
+											<apex:repeat value="{!day.Items}" var="calItem">
+												<div class="calendar-item {!HTMLENCODE(calItem.CssClass)}" onclick="calendarClient.calendarItemClicked(event, '{!calItem.ItemId}');">
+													<apex:outputText value="{!calItem.Name}" />
+												</div>
+											</apex:repeat>
+										</div>
+									</td>
+								</apex:repeat>
+							</tr>
+						</apex:repeat>
+					</tbody>
+				</table>
+
+			</apex:outputPanel>
+
+		</apex:outputPanel>
+
+	</apex:outputPanel>
+
+	<apex:outputPanel layout="block" id="calendarItemPopup" styleClass="calendar-item-popup">
+
+		<div id="calendar-item-popup-loader">
+			Loading... <!-- This text can be replaced with a loading image -->
+		</div>
+
+		<!-- Can't use top wrapper for rerender because it gets lost in the dom-->
+		<apex:outputPanel layout="block" id="calendarItemPopupContentWrapper">	
+
+			<apex:outputPanel layout="block" id="calendarItemPopupContent" rendered="{!NOT( ISNULL(SelectedCalendarItem) )}">
+
+				<h2>
+					<apex:outputText value="{!SelectedCalendarItem.Name}" />
+				</h2>
+
+				<span class="calendar-detail-link">
+					<a href="{!SelectedCalendarItem.DetailUrl}" alt="More Details for {!SelectedCalendarItem.Name}" target="_blank">
+							Details
+						</a>
+				</span>
+
+				<div class="calendar-line"></div>
+
+				<p>
+					<apex:outputText value="{0,date,E, MMMM d, h:mm a}">
+						<apex:param value="{!SelectedCalendarItem.StartDateTime}" />
+					</apex:outputText>
+					<apex:outputText value=" to {0,date,E, MMMM d, h:mm a}" 
+						rendered="{!SelectedCalendarItem.StartDate <> SelectedCalendarItem.EndDate}">
+						<apex:param value="{!SelectedCalendarItem.EndDateTime}" />
+					</apex:outputText>
+					<apex:outputText value=" to {0,date,h:mm a}" 
+						rendered="{!SelectedCalendarItem.StartDate == SelectedCalendarItem.EndDate}">
+						<apex:param value="{!SelectedCalendarItem.EndDateTime}" />
+					</apex:outputText>
+				</p>
+
+				<p>
+					<apex:outputText value="{!SelectedCalendarItem.Description}" />
+				</p>
+
+				<div class="calendar-line"></div>
+
+				<div class="calendar-action-container">
+					<apex:repeat value="{!SelectedCalendarItem.Actions}" var="action">
+						<div>
+							<apex:commandLink value="{!action.actionLabel}" action="{!action.performAction}" oncomplete="init();" rendered="{!action.initOnComplete}" status="calendarActionStatus" />
+							<apex:commandLink value="{!action.actionLabel}" action="{!action.performAction}" rendered="{!NOT(action.initOnComplete)}" status="calendarActionStatus" />
+						</div>
+					</apex:repeat>
+					<div>
+						<apex:actionStatus startText="Loading..." stopText="" id="calendarActionStatus" />
+					</div>
+				</div>
+
+			</apex:outputPanel>
+
+		</apex:outputPanel>
+
+	</apex:outputPanel>
+
+	<div id="calendar-popup-arrow" class="calendar-arrow-down">
+	</div>
+
+	<script type="text/javascript">
+
+		var calendarUtil = calendarUtil || {};
+
+		(function() {
+
+			calendarUtil.clearChildren = function(parent) {
+				while (parent.lastChild) {
+					parent.removeChild(parent.lastChild);
+				}
+			};
+
+			calendarUtil.abbreviatedMonthNumber = {
+					Jan: 1,
+					Feb: 2,
+					Mar: 3,
+					Apr: 4,
+					May: 5,
+					Jun: 6,
+					Jul: 7,
+					Aug: 8,
+					Sep: 9,
+					Oct: 10,
+					Nov: 11,
+					Dec: 12
+				};
+
+			/**
+			 * Convert salesforce Date object string to the format MM/dd/yyyy
+			 * 
+			 * @param	datestr	date string from salesforce Date object -- example: Fri Oct 28 00:00:00 GMT 2011
+			 * 
+			 * @return	formatted date, empty string if bad match
+			 */
+			calendarUtil.formatSalesforceDateString = function(datestr) {
+
+				if (datestr && datestr.length>0) {
+					var pat=/^([a-zA-Z]+)\s([a-zA-Z]+)\s(\d{2,2})\s(\d\d:\d\d:\d\d)\s([a-zA-Z]+)\s(\d{4,4})$/;
+					var match = pat.exec(datestr);
+					if (match && match.length == 7) {
+						return calendarUtil.abbreviatedMonthNumber[match[2]] + '/' + match[3] + '/' + match[6];
+					}
+				}
+				return '';	// this can't return null, because IE fills text boxes with the literal string "null"
+			};
+
+			calendarUtil.fixDateInput = function(dateElementId) {
+				var dateElement = document.getElementById(dateElementId);
+				dateElement.value = calendarUtil.formatSalesforceDateString(dateElement.value);
+			};
+
+			calendarUtil.fixDateInput('{!$Component.selectedDateInput}');
+
+		})();
+
+		var calendarClient = calendarClient || {};
+
+		(function() {
+			// setup calendar popup
+			calendarClient.calendarItemPopup = document.getElementById('{!$Component.calendarItemPopup}');
+			calendarClient.calendarItemPopupLoader = document.getElementById('calendar-item-popup-loader');
+			calendarClient.calendarItemPopupContentId = '{!$Component.calendarItemPopupContent}';
+			calendarClient.calendarPopupArrow = document.getElementById('calendar-popup-arrow');
+
+			calendarClient.calendarItemPopup.style.display = 'none';
+			calendarClient.calendarItemPopupLoader.style.display = 'none';
+			calendarClient.calendarPopupArrow.style.display = 'none';
+
+			calendarClient.calendarItemPopup.lastEvent = null;
+
+			calendarClient.calendarItemPopup.onclick = function(e) {
+				e.stopPropagation();
+			}
+
+			calendarClient.showCalendarItemPopup = function() {
+				// if we don't display as block first, we can' get actual dimensions
+				calendarClient.calendarItemPopup.style.visibility = 'hidden';
+				calendarClient.calendarItemPopup.style.display = 'block';
+				calendarClient.setPopupLocation();
+				calendarClient.calendarItemPopup.style.visibility = 'visible';
+			}
+
+			calendarClient.hideCalendarItemPopup = function() {
+				calendarClient.calendarPopupArrow.style.display = 'none';
+				calendarClient.calendarItemPopup.style.display = 'none';
+			}
+
+			calendarClient.showPopupLoader = function() {
+				calendarClient.calendarPopupArrow.style.display = 'block';
+				calendarClient.calendarItemPopupLoader.style.display = 'block';
+			}
+
+			calendarClient.hidePopupLoader = function() {
+				calendarClient.calendarItemPopupLoader.style.display = 'none';
+				calendarClient.setPopupLocation();
+			}
+
+			calendarClient.setPopupLocation = function() {
+				var mouseX = calendarClient.calendarItemPopup.lastEvent.clientX
+				var mouseY = calendarClient.calendarItemPopup.lastEvent.clientY;
+
+				var width = calendarClient.calendarItemPopup.offsetWidth;
+				var left = mouseX - width / 2;
+				var arrowLeft = mouseX - 10;
+				var screenWidth = screen.width;
+				if (left < 0) {
+					left = 0;
+				} else if (screenWidth - mouseX < width / 2) {
+					left = left - (screenWidth - mouseX);
+					arrowLeft = mouseX + 10;
+				}
+				calendarClient.calendarItemPopup.style.left = left + 'px';
+
+				var height = calendarClient.calendarItemPopup.offsetHeight;
+				var top = mouseY - height - 10;
+				var arrowTop = mouseY - 14;
+				calendarClient.calendarPopupArrow.className = 'calendar-arrow-down';
+				if (top < 0) {
+					top = top + 20 + height;
+					arrowTop = mouseY + 3;
+					calendarClient.calendarPopupArrow.className = 'calendar-arrow-up';
+				}
+				calendarClient.calendarItemPopup.style.top = top + 'px';
+
+				calendarClient.calendarPopupArrow.style.left = arrowLeft + 'px';
+				calendarClient.calendarPopupArrow.style.top = arrowTop + 'px';
+			}
+
+			calendarClient.calendarItemClicked = function(e, calendarItemId) {
+				if (!{!params.ShowCalendarItemPopup}) {
+					return;
+				}
+				
+				// store event
+				e = e || window.event;
+				calendarClient.calendarItemPopup.lastEvent = e;
+
+				var calendarItemContent = document.getElementById(calendarClient.calendarItemPopupContentId);
+				if (calendarItemContent) {
+					calendarUtil.clearChildren(calendarItemContent);
+				}
+				calendarClient.showPopupLoader();
+				calendarClient.showCalendarItemPopup();
+				setSelectedCalendarItem(calendarItemId);
+				e.stopPropagation();
+			}
+
+			// hide if body is clicked outside of popup
+			document.getElementsByTagName('body')[0].addEventListener('click', function() {
+				calendarClient.hideCalendarItemPopup();
+			});
+		})();
+
+	</script>
+
+	<apex:actionFunction action="{!setSelectedCalendarItem}" name="setSelectedCalendarItem" 
+		rerender="calendarItemPopupContentWrapper" oncomplete="calendarClient.hidePopupLoader();">
+		<apex:param name="selectedCalendarItemId" value="" assignTo="{!SelectedCalendarItemId}" />
+	</apex:actionFunction>
+
+	<apex:actionFunction action="{!setSelectedCalendarItem}" name="init" rerender="calendarContent"
+		oncomplete="calendarClient.hideCalendarItemPopup();" />
+
+</apex:component>
