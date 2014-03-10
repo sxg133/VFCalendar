@@ -5,12 +5,12 @@
 */
 public with sharing class CalendarExampleController implements ICalendarItemRetriever {
 
-	public CalendarHandler cal {get; private set;}
-	public CalendarParameters calParams {get; private set;}
+	public CalendarHandler Cal {get; private set;}
+	public CalendarParameters CalParams {get; private set;}
 
 	public CalendarExampleController() {
-		calParams = new CalendarParameters();
-		cal = new CalendarHandler(this);
+		CalParams = new CalendarParameters();
+		Cal = new CalendarHandler(this);
 	}
 
 	/**
