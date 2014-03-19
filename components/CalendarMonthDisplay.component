@@ -1,6 +1,65 @@
 <apex:component>
 	<apex:attribute name="cal" description="The calendar to display" type="CalendarHandler" required="true" />
 
+	<style type="text/css">
+
+		/* month view */
+
+		.calendar-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.calendar-header-cell {
+			text-align: center;
+		}
+
+		.calendar-date-number {
+			text-align: left;
+			color: #ACACAC;
+			padding: 3px;
+		}
+
+		.calendar-day-cell {
+			border: solid 1px #DDDDDD;
+			margin: 0;
+			width: 14%;
+			overflow: hidden;
+		}
+
+		.calendar-day-cell > .calendar-day {
+			height: 100px;
+		}
+
+		.calendar-day-cell.selected-month .calendar-date-number {
+			color: #000000;
+		}
+
+		.calendar-day-cell.today {
+			background-color: #F2F2F2;
+			border: double 1px #000000;
+			z-index: 1;
+		}
+
+		.calendar-day-cell.today .calendar-date-number {
+			font-weight: bold;
+		}
+
+		.calendar-item-container {
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.calendar-item-container:hover {
+			overflow: auto;
+		}
+
+		.calendar-item {
+			padding: 3px 5px;
+		}
+		
+	</style>
+
 	<apex:outputPanel layout="block" styleClass="calendar-view month" id="calendarMonthView">
 
 		<table class="calendar-table month" cellpadding="0" cellspacing="0">
