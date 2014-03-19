@@ -1,0 +1,44 @@
+<apex:component>
+	<apex:attribute name="cal" description="The calendar to display" type="CalendarHandler" required="true" />
+
+	<apex:outputPanel layout="block" styleClass="calendar-view month" id="calendarMonthView">
+
+		<table class="calendar-table month" cellpadding="0" cellspacing="0">
+			<thead>
+				<tr class="calendar-header-row">
+					<apex:repeat value="{!cal.WeekdayNames}" var="wd">
+						<th class="calendar-header-cell">
+							<apex:outputText value="{!wd}" />
+						</th>
+					</apex:repeat>
+				</tr>
+			</thead>
+			<tbody>
+				<apex:repeat value="{!cal.Weeks}" var="week">
+					<tr class="calendar-row">
+						<apex:repeat value="{!week.Days}" var="day">
+							<td class="calendar-day-cell {!IF(day.CalendarDate == TODAY(), 'today', '')} {!IF(MONTH(day.CalendarDate) == MONTH(cal.ActiveDate), 'selected-month', '')}">
+								<div class="calendar-day">
+									<div class="calendar-date-number">
+										<apex:outputText value="{0,date,d}">
+											<apex:param value="{!day.CalendarDate}" />
+										</apex:outputText>
+									</div>
+									<div class="calendar-item-container">
+										<apex:repeat value="{!day.Items}" var="calItem">
+											<div class="calendar-item {!HTMLENCODE(calItem.CssClass)}" onclick="calendarClient.calendarItemClicked(event, '{!calItem.ItemId}');">
+												<apex:outputText value="{!calItem.Name}" />
+											</div>
+										</apex:repeat>
+									</div>
+								</div>
+							</td>
+						</apex:repeat>
+					</tr>
+				</apex:repeat>
+			</tbody>
+		</table>
+
+	</apex:outputPanel>
+
+</apex:component>

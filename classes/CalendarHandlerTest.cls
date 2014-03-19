@@ -120,9 +120,6 @@ private class CalendarHandlerTest {
 
 			system.assertEquals(7, calHandler.WeekdayNames.size(), 'Incorrect number of weekday names.');
 
-			calHandler.setView(CalendarHandler.CalendarView.WEEK);
-			system.assertEquals(CalendarHandler.CalendarView.WEEK, calHandler.View, 'Failed to set calendar view.');
-
 			system.assertEquals(2, calHandler.DayOfWeek, 'Incorrect day of week for active date.');
 			system.assertEquals('Monday', calHandler.Weekday, 'Incorrect weekday name for active date.');
 
@@ -262,7 +259,7 @@ private class CalendarHandlerTest {
 		system.assert(cp.ShowViewSelect, 'The default for show view select should be true.');
 		system.assert(cp.ShowCalendarItemPopup, 'The default for show item popup should be true.');
 		system.assertEquals(
-			CalendarParameters.CALENDAR_VIEW_MONTH, 
+			CalendarParameters.CalendarView.MONTH, 
 			cp.SelectedView,
 			'The default for the calendar view should be \'Month\''
 			);

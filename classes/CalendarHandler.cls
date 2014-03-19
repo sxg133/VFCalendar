@@ -17,12 +17,6 @@ public with sharing class CalendarHandler {
 		'Saturday'
 	};
 
-	public enum CalendarView {
-		MONTH,
-		WEEK,
-		DAY
-	}
-
 	public string[] WeekdayNames {
 		get {
 			return weekdays;
@@ -30,7 +24,6 @@ public with sharing class CalendarHandler {
 	}
 
 	public Date ActiveDate { get; private set; }
-	public CalendarView View { get; private set; }
 	public Date StartOfWeek {
 		get {
 			return this.ActiveDate.toStartOfWeek();
@@ -61,6 +54,21 @@ public with sharing class CalendarHandler {
 			return weekdays[this.DayOfWeek - 1];
 		}
 	}
+	public integer WeekOfMonth {
+		get {
+			for (integer i=0; i<Weeks.size(); i++) {
+				if (Weeks[i].isInWeek(ActiveDate)) {
+					return i;
+				}
+			}
+			throw new CalendarException('The active date does not fall within any week.');
+		}
+	}
+	public CalendarWeek ActiveWeek {
+		get {
+			return Weeks[WeekOfMonth];
+		}
+	}
 	public List<CalendarWeek> Weeks {get; private set;}
 	public List<CalendarItem> Items {get; private set;}
 
@@ -73,7 +81,6 @@ public with sharing class CalendarHandler {
 	public CalendarHandler(ICalendarItemRetriever calendarItemRetriever, Date activeDate) {
 		this.calendarItemRetriever = calendarItemRetriever;
 		setDate(activeDate);
-		this.View = CalendarView.MONTH;
 	}
 
 	/**
@@ -128,15 +135,6 @@ public with sharing class CalendarHandler {
 			updateCalendarWeeks();
 			setCalendarWeekItems();
 		}
-	}
-
-	/**
-	*	Update the calendar's current view
-	*
-	*	@param	view	The new calendar view
-	*/
-	public void setView(CalendarView view) {
-		this.View = view;
 	}
 
 	private void updateCalendarWeeks() {
@@ -259,6 +257,17 @@ public with sharing class CalendarHandler {
 			this.StartDate = startDate;
 			updateCalendarDays();
 			this.Items = new List<CalendarItem>();
+		}
+
+		/**
+		*	Determine if a date falls in the week
+		*
+		*	@param	d	The date to check
+		*
+		*	@return Returns true if the date falls in the week
+		*/
+		public boolean isInWeek(Date d) {
+			return StartDate <= d && d >= EndDate;
 		}
 
 		private void updateCalendarDays() {
