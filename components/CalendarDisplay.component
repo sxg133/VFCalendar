@@ -35,6 +35,32 @@
 			text-align: center;
 		}
 
+		.calendar-left {
+			position: absolute;
+			left: 0;
+		}
+
+		.calendar-right {
+			position: absolute;
+			right: 0;
+		}
+
+		.calendar-day-container {
+			text-align: center;
+		}
+
+		.calendar-status {
+			color: #6D6D6D;
+		}
+
+		.calendar-header-bottom {
+			height: 25px;
+		}
+
+	</style>
+
+	<style type="text/css">
+
 		/* Calendar Item Popup */
 
 		.calendar-item-popup {
@@ -95,10 +121,12 @@
 			<div>
 
 				<apex:commandButton value="<<" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousYear}" />
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousYear}"
+					status="calendarViewStatus" />
 
 				<apex:commandButton value="<" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousMonth}" />
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousMonth}"
+					status="calendarViewStatus" />
 
 				<apex:outputPanel id="calendarTitle" styleClass="calendar-title" rendered="{!params.ShowHeader}">
 					<h1>
@@ -109,25 +137,43 @@
 				</apex:outputPanel>
 
 				<apex:commandButton value=">" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextMonth}" />
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextMonth}"
+					status="calendarViewStatus" />
 
 				<apex:commandButton value=">>" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextYear}" />
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextYear}"
+					status="calendarViewStatus" />
 
 			</div>
 
-			<div>
+			<div class="calendar-today-container">
 
 				<apex:commandButton value="Today" action="{!goToToday}" 
-					rerender="calendarBody, calendarTitle, selectedDate" rendered="{!params.ShowNavigation}" />
+					rerender="calendarBody, calendarTitle, selectedDate" rendered="{!params.ShowNavigation}"
+					status="calendarViewStatus" />
 
-				<apex:outputPanel id="selectedDate">
+			</div>
+
+			<div class="calendar-header-bottom">
+
+				<apex:outputPanel styleclass="calendar-left" rendered="{!params.ShowNavigation}">
+
+					<input type="button" value="Month" />
+					<input type="button" value="Week" />
+
+				</apex:outputPanel>
+
+				<span class="calendar-status">
+					<apex:actionStatus id="calendarViewStatus" startText="Loading..." stopText="" />
+				</span>
+
+				<apex:outputPanel id="selectedDate" styleClass="calendar-right">
 
 					<apex:inputText value="{!SelectedDate}" rendered="{!params.ShowNavigation}"
 						id="selectedDateInput" styleClass="calendar-select-date"
 						onfocus="DatePicker.pickDate(true, '{!$Component.selectedDateInput}', false);">
 						<apex:actionSupport action="{!setSelectedCalendarItem}" event="onchange"
-							rerender="calendarBody, calendarTitle" />
+							rerender="calendarBody, calendarTitle" status="calendarViewStatus" />
 					</apex:inputText>
 
 					<script type="text/javascript">
@@ -147,6 +193,9 @@
 		<apex:outputPanel layout="block" styleClass="calendar-body" id="calendarBody">
 
 			<c:CalendarMonthDisplay cal="{!cal}" rendered="{!params.SelectedViewName == 'MONTH'}" />
+
+			<apex:outputPanel layout="block" styleClass="calendar-view week" id="calendarWeekView">
+			</apex:outputPanel>
 
 		</apex:outputPanel>
 
@@ -197,7 +246,8 @@
 						</div>
 					</apex:repeat>
 					<div>
-						<apex:actionStatus startText="Loading..." stopText="" id="calendarActionStatus" />
+						<apex:actionStatus startText="Loading..." stopText="" id="calendarActionStatus" 
+							styleClass="calendar-status" />
 					</div>
 				</div>
 
