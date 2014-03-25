@@ -56,6 +56,16 @@
 			height: 25px;
 		}
 
+		.calendar-view-nav > input {
+			border: outset 1px #000000;
+			border-radius: 2px;
+		}
+
+		.calendar-view-nav > input.calendar-selected {
+			border-style: inset;
+			border-color: #D5D5D5;
+		}
+
 	</style>
 
 	<style type="text/css">
@@ -164,17 +174,6 @@
 
 			<div class="calendar-header-bottom">
 
-				<apex:outputPanel styleClass="calendar-view-nav" rendered="{!params.ShowNavigation}">
-
-					<input type="button" value="Month" />
-					<input type="button" value="Week" />
-
-				</apex:outputPanel>
-
-				<span class="calendar-status">
-					<apex:actionStatus id="calendarViewStatus" startText="Loading..." stopText="" />
-				</span>
-
 				<apex:outputPanel id="selectedDate" styleClass="calendar-right">
 
 					<apex:inputText value="{!SelectedDate}" rendered="{!params.ShowNavigation}"
@@ -191,6 +190,21 @@
 							}
 						})();
 					</script>
+
+				</apex:outputPanel>
+
+				<span class="calendar-status">
+					<apex:actionStatus id="calendarViewStatus" startText="Loading..." stopText="" />
+				</span>
+
+				<apex:outputPanel id="calendarViewNav" styleClass="calendar-view-nav" rendered="{!params.ShowNavigation}">
+
+					<input type="button" value="Month" 
+						class="{!IF(params.SelectedViewName == 'MONTH', 'calendar-selected', '')}"
+						onclick="changeView('MONTH');" />
+					<input type="button" value="Week" 
+						class="{!IF(params.SelectedViewName == 'WEEK', 'calendar-selected', '')}" 
+						onclick="changeView('WEEK');" />
 
 				</apex:outputPanel>
 
@@ -429,5 +443,10 @@
 
 	<apex:actionFunction action="{!setSelectedCalendarItem}" name="init" rerender="calendarContent"
 		oncomplete="calendarClient.hideCalendarItemPopup();" />
+
+	<apex:actionFunction action="{!changeView}" name="changeView" rerender="calendarBody, calendarViewNav"
+		status="calendarViewStatus">
+		<apex:param name="viewSelection" value="" assignTo="{!ViewSelection}" />
+	</apex:actionFunction>
 
 </apex:component>

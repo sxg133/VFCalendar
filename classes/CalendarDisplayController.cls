@@ -7,6 +7,7 @@ public with sharing class CalendarDisplayController {
 	public CalendarHandler CalHandler {get; set;}
 	public CalendarParameters CalParams {get; set;}
 	public string SelectedCalendarItemId {get; set;}
+	public string ViewSelection {get; set;}
 	public CalendarItem SelectedCalendarItem {
 		get {
 			try {
@@ -59,6 +60,10 @@ public with sharing class CalendarDisplayController {
 		} else if (CalParams.SelectedView == CalendarParameters.CalendarView.WEEK) {
 			CalHandler.goToPreviousMonth();
 		}
+	}
+
+	public void changeView() {
+		CalParams.SelectedViewName = ViewSelection;
 	}
 
 	// dummy method for setting selected calendar item

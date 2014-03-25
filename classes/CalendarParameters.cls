@@ -20,6 +20,15 @@ public with sharing class CalendarParameters {
 		get {
 			return SelectedView.name();
 		}
+		set {
+			if (value == 'MONTH') {
+				this.SelectedView = CalendarView.MONTH;
+			} else if (value == 'WEEK') {
+				this.SelectedView = CalendarView.WEEK;
+			} else {
+				throw new CalendarException('Unrecognized view name: ' + value);
+			}
+		}
 	}
 
 	public CalendarParameters() {
