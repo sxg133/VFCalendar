@@ -3,7 +3,7 @@
 *
 *	@author	Sahil Grover	<sgrover@acumensolutions.com>
 */
-public with sharing virtual class CalendarItem {
+public with sharing virtual class CalendarItem implements Comparable {
 
 	public string ItemId {get; private set;}
 	public string Name {get; set;}
@@ -132,5 +132,22 @@ public with sharing virtual class CalendarItem {
 		this.Actions = actions;
 		this.DetailUrl = '/' + this.ItemId;
 		this.IsAllDay = false;
+	}
+
+	/**
+	*	Compare two calendar items
+	*
+	*	@param	calItemObject	A calendar item to compare to
+	*
+	*	@return	Returns 1 if this is greater, -1 if this is less, 0 if they are equal
+	*/
+	public integer compareTo(Object calItemObject) {
+		CalendarItem calItem = (CalendarItem)calItemObject;
+		if (this.StartDateTime > calItem.StartDateTime) {
+			return 1;
+		} else if (this.StartDateTime < calItem.StartDateTime) {
+			return -1;
+		}
+		return 0;
 	}
 }
