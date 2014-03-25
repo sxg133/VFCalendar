@@ -267,7 +267,7 @@ public with sharing class CalendarHandler {
 		*	@return Returns true if the date falls in the week
 		*/
 		public boolean isInWeek(Date d) {
-			return StartDate <= d && d >= EndDate;
+			return StartDate <= d && d <= EndDate;
 		}
 
 		private void updateCalendarDays() {
