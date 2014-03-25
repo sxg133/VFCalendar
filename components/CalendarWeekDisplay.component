@@ -109,11 +109,13 @@
 					<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
 						<td class="calendar-day-cell {!IF(day.CalendarDate == TODAY(), 'calendar-today-cell', '')}">
 							<div class="calendar-hour-container">
-								<apex:repeat value="{!cal.DayHourBlocks}" var="hour">
-									<div class="calendar-time-block calendar-hour">
-									</div>
-									<div class="calendar-time-block calendar-half-hour">
-									</div>
+								<apex:repeat value="{!day.HalfHourItems}" var="halfHour">
+									<apex:outputPanel layout="block" 
+										styleClass="calendar-time-block {!IF(halfHour.IsOnHour, 'calendar-hour', 'calendar-half-hour')}" >
+										<apex:repeat value="{!halfHour.Items}" var="item">
+											
+										</apex:repeat>
+									</apex:outputPanel>
 								</apex:repeat>
 							</div>
 						</td>
