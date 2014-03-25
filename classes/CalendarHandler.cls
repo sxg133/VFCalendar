@@ -318,6 +318,7 @@ public with sharing class CalendarHandler {
 						day.Items.add(item);
 					}
 				}
+				day.setupHalfHourEvents();
 			}
 		}
 	}
@@ -325,10 +326,68 @@ public with sharing class CalendarHandler {
 	private class CalendarDay {
 		public Date CalendarDate {get; private set;}
 		public List<CalendarItem> Items {get; set;}
+		public List<HalfHourItem> HalfHourItems {get; private set;}
 
 		public CalendarDay(Date day) {
 			this.CalendarDate = day;
 			this.Items = new List<CalendarItem>();
+		}
+
+		/**
+		*	Setup the half hour event list for the day
+		*/
+		public void setupHalfHourEvents() {
+			HalfHourItems = new List<HalfHourItem>();
+			for (integer i=0; i<DAY_HOUR_BLOCKS.size(); i++) {
+				HalfHourItem hourItem = new HalfHourItem(DAY_HOUR_BLOCKS[i].time());
+				HalfHourItem halfHourItem = new HalfHourItem(DAY_HOUR_BLOCKS[i].time().addMinutes(30));
+				putItemsInHalfHour(hourItem);
+				putItemsInHalfHour(halfHourItem);
+				HalfHourItems.add(hourItem);
+				HalfHourItems.add(halfHourItem);
+			}
+			HalfHourItems.sort();
+		}
+
+		private void putItemsInHalfHour(HalfHourItem hhItem) {
+			hhItem.Items = new List<CalendarItem>();
+			for (CalendarItem item : Items) {
+				Time itemTime = item.StartDateTime.time();
+				if (hhItem.HalfHourTime <= itemTime && itemTime < hhItem.HalfHourTime.addMinutes(30)) {
+					hhItem.Items.add(item);
+				}
+			}
+		}
+	}
+
+	private class HalfHourItem implements Comparable {
+		public Time HalfHourTime {get; private set;}
+		public List<CalendarItem> Items {get; set;}
+		public boolean IsOnHour {
+			get {
+				return HalfHourTime.minute() == 0;
+			}
+		}
+
+		public HalfHourItem(Time halfHourTime) {
+			this.HalfHourTime = halfHourTime;
+		}
+
+		/**
+		*	Compare two half hour items
+		*
+		*	@param	halfHourObject	A half hour item to compare to
+		*
+		*	@return	Returns 1 if this is greater, -1 if this is less, 0 if they are equal
+		*/
+		public integer compareTo(Object halfHourObject) {
+			HalfHourItem hhItem = (HalfHourItem)halfHourObject;
+			if (this.HalfHourTime > hhItem.HalfHourTime) {
+				return 1;
+			} else if (this.HalfHourTime < hhItem.HalfHourTime) {
+				return -1;
+			}
+			return 0;
 		}
 	}
 }
