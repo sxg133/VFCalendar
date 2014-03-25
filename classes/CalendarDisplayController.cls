@@ -5,6 +5,7 @@
 */
 public with sharing class CalendarDisplayController {
 	public CalendarHandler CalHandler {get; set;}
+	public CalendarParameters CalParams {get; set;}
 	public string SelectedCalendarItemId {get; set;}
 	public CalendarItem SelectedCalendarItem {
 		get {
@@ -26,6 +27,38 @@ public with sharing class CalendarDisplayController {
 
 	public void goToToday() {
 		CalHandler.setDate(Date.today());
+	}
+
+	public void goToNextUnit() {
+		if (CalParams.SelectedView == CalendarParameters.CalendarView.MONTH) {
+			CalHandler.goToNextMonth();
+		} else if (CalParams.SelectedView == CalendarParameters.CalendarView.WEEK) {
+			CalHandler.goToNextWeek();
+		}
+	}
+
+	public void goToNextBigUnit() {
+		if (CalParams.SelectedView == CalendarParameters.CalendarView.MONTH) {
+			CalHandler.goToNextYear();
+		} else if (CalParams.SelectedView == CalendarParameters.CalendarView.WEEK) {
+			CalHandler.goToNextMonth();
+		}
+	}
+
+	public void goToPreviousUnit() {
+		if (CalParams.SelectedView == CalendarParameters.CalendarView.MONTH) {
+			CalHandler.goToPreviousMonth();
+		} else if (CalParams.SelectedView == CalendarParameters.CalendarView.WEEK) {
+			CalHandler.goToPreviousWeek();
+		}
+	}
+
+	public void goToPreviousBigUnit() {
+		if (CalParams.SelectedView == CalendarParameters.CalendarView.MONTH) {
+			CalHandler.goToPreviousYear();
+		} else if (CalParams.SelectedView == CalendarParameters.CalendarView.WEEK) {
+			CalHandler.goToPreviousMonth();
+		}
 	}
 
 	// dummy method for setting selected calendar item

@@ -1,6 +1,8 @@
 <apex:component controller="CalendarDisplayController">
-	<apex:attribute name="params" description="The calendar parameters" type="CalendarParameters" required="true" />
-	<apex:attribute name="cal" description="The calendar to display" type="CalendarHandler" required="true" assignTo="{!CalHandler}" />
+	<apex:attribute name="params" description="The calendar parameters" type="CalendarParameters" 
+		required="true" assignTo="{!CalParams}" />
+	<apex:attribute name="cal" description="The calendar to display" type="CalendarHandler" 
+		required="true" assignTo="{!CalHandler}" />
 
 	<style type="text/css">
 
@@ -103,6 +105,15 @@
 			border-bottom: 10px solid #ffffff;
 		}
 
+		.calendar-table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.calendar-header-cell {
+			text-align: center;
+		}
+
 	</style>
 
 	<script type="text/javascript">
@@ -118,11 +129,11 @@
 			<div>
 
 				<apex:commandButton value="<<" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousYear}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToPreviousUnit}"
 					status="calendarViewStatus" />
 
 				<apex:commandButton value="<" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToPreviousMonth}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToPreviousBigUnit}"
 					status="calendarViewStatus" />
 
 				<apex:outputPanel id="calendarTitle" styleClass="calendar-title" rendered="{!params.ShowHeader}">
@@ -134,11 +145,11 @@
 				</apex:outputPanel>
 
 				<apex:commandButton value=">" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextMonth}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToNextUnit}"
 					status="calendarViewStatus" />
 
 				<apex:commandButton value=">>" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!cal.goToNextYear}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToNextBigUnit}"
 					status="calendarViewStatus" />
 
 			</div>
@@ -191,8 +202,7 @@
 
 			<c:CalendarMonthDisplay cal="{!cal}" rendered="{!params.SelectedViewName == 'MONTH'}" />
 
-			<apex:outputPanel layout="block" styleClass="calendar-view week" id="calendarWeekView">
-			</apex:outputPanel>
+			<c:CalendarWeekDisplay cal="{!cal}" rendered="{!params.SelectedViewName == 'WEEK'}" />
 
 		</apex:outputPanel>
 

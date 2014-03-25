@@ -1,0 +1,48 @@
+<apex:component>
+	<apex:attribute name="cal" description="The calendar to display" type="CalendarHandler" required="true" />
+
+	<style type="text/css">
+
+		.calendar-day-cell {
+			width: 13%;			
+		}
+
+		.calendar-time-cell {
+			width: 9%;
+		}
+
+	</style>
+
+	<apex:outputPanel layout="block" styleClass="calendar-view week" id="calendarWeekView">
+
+		<div class="calendar-week-header">
+
+			<table class="calendar-table week">
+				<thead>
+					<tr class="calendar-header-row">
+						<th class="calendar-time-cell"></th>
+						<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
+							<th class="calendar-day-cell">
+								<apex:outputText value="{0,date,E M/d}">
+									<apex:param value="{!day.CalendarDate}" />
+								</apex:outputText>
+							</th>
+						</apex:repeat>
+					</tr>
+					<tr class="calendar-header-row">
+						<th class="calendar-time-cell">
+							All Day
+						</th>
+						<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
+							<th class="calendar-day-cell">
+							</th>
+						</apex:repeat>
+					</tr>
+				</thead>
+			</table>
+
+		</div>
+
+	</apex:outputPanel>
+
+</apex:component>
