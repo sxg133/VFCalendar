@@ -11,6 +11,21 @@
 			width: 9%;
 		}
 
+		.calendar-header-row .calendar-day-cell {
+			text-align: center;
+			border-style: solid;
+			border-width: 1px;
+			border-color: #D3D3D3 #D3D3D3 #000000;
+		}
+
+		.calendar-today-cell {
+			background-color: #F1F1F1;
+		}
+
+		.calendar-header-row .calendar-today-cell {
+			font-weight: bold;
+		}
+
 	</style>
 
 	<apex:outputPanel layout="block" styleClass="calendar-view week" id="calendarWeekView">
@@ -20,13 +35,13 @@
 			<table class="calendar-table week">
 				<thead>
 					<tr class="calendar-header-row">
-						<th class="calendar-time-cell"></th>
+						<td class="calendar-time-cell"></td>
 						<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
-							<th class="calendar-day-cell">
+							<td class="calendar-day-cell {!IF(day.CalendarDate == TODAY(), 'calendar-today-cell', '')}">
 								<apex:outputText value="{0,date,E M/d}">
 									<apex:param value="{!day.CalendarDate}" />
 								</apex:outputText>
-							</th>
+							</td>
 						</apex:repeat>
 					</tr>
 					<tr class="calendar-header-row">
@@ -34,8 +49,8 @@
 							All Day
 						</th>
 						<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
-							<th class="calendar-day-cell">
-							</th>
+							<td class="calendar-day-cell {!IF(day.CalendarDate == TODAY(), 'calendar-today-cell', '')}">
+							</td>
 						</apex:repeat>
 					</tr>
 				</thead>
