@@ -8,7 +8,7 @@
 		}
 
 		.calendar-time-cell {
-			width: 9%;
+			width: 5%;
 		}
 
 		.calendar-header-row .calendar-day-cell {
@@ -26,11 +26,42 @@
 			font-weight: bold;
 		}
 
+		.calendar-hour-container {
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.calendar-time-block {
+			border-color: #D3D3D3 #000000 #D3D3D3 #D3D3D3;
+			border-style: solid;
+			border-width: 1px 1px 0 0;
+			height: 2%;
+			overflow: visible;
+			position: relative;
+		}
+
+		.calendar-half-hour {
+			border-top-style: dashed;
+		}
+
+		.calendar-table.week tbody td {
+			height: 1600px;
+		}
+
+		.calendar-week-header {
+			overflow-y: scroll;
+		}
+
+		.calendar-week-body {
+			height: 500px;
+			overflow-y: scroll;
+		}
+
 	</style>
 
 	<apex:outputPanel layout="block" styleClass="calendar-view week" id="calendarWeekView">
 
-		<div class="calendar-week-header">
+		<div class="calendar-table-container calendar-week-header">
 
 			<table class="calendar-table week">
 				<thead>
@@ -54,6 +85,40 @@
 						</apex:repeat>
 					</tr>
 				</thead>
+			</table>
+
+		</div>
+
+		<div class="calendar-table-container calendar-week-body">
+
+			<table class="calendar-table week">
+				<tbody>
+					<td class="calendar-time-cell">
+						<div class="calendar-hour-container">
+							<apex:repeat value="{!cal.DayHourBlocks}" var="hour">
+								<div class="calendar-time-block calendar-hour">
+									<apex:outputText value="{0,date,h:mm a}">
+										<apex:param value="{!hour}" />
+									</apex:outputText>
+								</div>
+								<div class="calendar-time-block calendar-half-hour">
+								</div>
+							</apex:repeat>
+						</div>
+					</td>
+					<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
+						<td class="calendar-day-cell {!IF(day.CalendarDate == TODAY(), 'calendar-today-cell', '')}">
+							<div class="calendar-hour-container">
+								<apex:repeat value="{!cal.DayHourBlocks}" var="hour">
+									<div class="calendar-time-block calendar-hour">
+									</div>
+									<div class="calendar-time-block calendar-half-hour">
+									</div>
+								</apex:repeat>
+							</div>
+						</td>
+					</apex:repeat>
+				</tbody>
 			</table>
 
 		</div>

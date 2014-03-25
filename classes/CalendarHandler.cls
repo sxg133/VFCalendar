@@ -17,43 +17,59 @@ public with sharing class CalendarHandler {
 		'Saturday'
 	};
 
+	// can't make this Time[] because VF won't render it properly
+	private static final DateTime[] DAY_HOUR_BLOCKS;
+
 	public string[] WeekdayNames {
 		get {
 			return weekdays;
 		}
 	}
 
+	public DateTime[] DayHourBlocks {
+		get {
+			return DAY_HOUR_BLOCKS;
+		}
+	}
+
 	public Date ActiveDate { get; private set; }
+
 	public Date StartOfWeek {
 		get {
 			return this.ActiveDate.toStartOfWeek();
 		}
 	}
+
 	public Date EndOfWeek {
 		get {
 			return this.StartOfWeek.addDays(6);
 		}
 	}
+
 	public Date StartOfMonth {
 		get {
 			return this.ActiveDate.toStartOfMonth();
 		}
 	}
+
 	public Date EndOfMonth {
 		get {
 			return this.StartOfMonth.addMonths(1).addDays(-1);
 		}
 	}
+
 	public integer DayOfWeek {
 		get {
 			return -1 * (this.ActiveDate.daysBetween(this.StartOfWeek) - 1);
 		}
 	}
+
 	public string Weekday {
 		get {
 			return weekdays[this.DayOfWeek - 1];
 		}
 	}
+
 	public integer WeekOfMonth {
 		get {
 			for (integer i=0; i<Weeks.size(); i++) {
@@ -64,15 +80,31 @@ public with sharing class CalendarHandler {
 			throw new CalendarException('The active date does not fall within any week.');
 		}
 	}
+
 	public CalendarWeek ActiveWeek {
 		get {
 			return Weeks[WeekOfMonth];
 		}
 	}
+
 	public List<CalendarWeek> Weeks {get; private set;}
 	public List<CalendarItem> Items {get; private set;}
 
 	private ICalendarItemRetriever calendarItemRetriever;
+
+	static {
+		// set up day hour blocks
+		DAY_HOUR_BLOCKS = new DateTime[24];
+		Date d = Date.today();
+		Time t = Time.newInstance(0, 0, 0, 0);
+		Time startDay = Time.newInstance(0, 0, 0, 0);
+		integer hourIndex = 0;
+		do {
+			DAY_HOUR_BLOCKS[hourIndex] = DateTime.newInstanceGmt(d, t);
+			t = t.addMinutes(60);
+			hourIndex++;
+		} while (t != startDay);
+	}
 
 	public CalendarHandler(ICalendarItemRetriever calendarItemRetriever) {
 		this(calendarItemRetriever, Date.today());
