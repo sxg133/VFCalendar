@@ -139,11 +139,11 @@
 			<div>
 
 				<apex:commandButton value="<<" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToPreviousUnit}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToPreviousBigUnit}"
 					status="calendarViewStatus" />
 
 				<apex:commandButton value="<" rendered="{!params.ShowNavigation}"
-					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToPreviousBigUnit}"
+					rerender="calendarBody, calendarTitle, selectedDate" action="{!goToPreviousUnit}"
 					status="calendarViewStatus" />
 
 				<apex:outputPanel id="calendarTitle" styleClass="calendar-title" rendered="{!params.ShowHeader}">
