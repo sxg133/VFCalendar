@@ -9,13 +9,15 @@ A calendar component for VisualForce pages
 
 ![Calendar Month View](https://raw.github.com/sxg133/VFCalendar/master/calendar_month_view.png)
 
+![Calendar Week View](https://raw.github.com/sxg133/VFCalendar/master/calendar_week_view.png)
+
 Documentation
 =============
 
 Display standard or custom events and generic items on a VisualForce calendar.  Put the component tag on your VisualForce page.
 
     <apex:form >
-    	<c:CalendarDisplay params="{!calParams}" cal="{!cal}" />
+        <c:CalendarDisplay params="{!calParams}" cal="{!cal}" />
 	</apex:form>
     
 #### Attributes
@@ -160,7 +162,3 @@ The action class must implement the following methods:
 *   __performAction__
 
     Executes the action logic
-
-#### Coming Soon
-
-*   Calendar week view and view switcher
