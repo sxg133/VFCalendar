@@ -10,6 +10,7 @@ public with sharing class CalendarExampleController implements ICalendarItemRetr
 
 	public CalendarExampleController() {
 		CalParams = new CalendarParameters();
+		CalParams.SelectedView = CalendarParameters.CalendarView.WEEK;
 		Cal = new CalendarHandler(this);
 	}
 
@@ -41,7 +42,7 @@ public with sharing class CalendarExampleController implements ICalendarItemRetr
 		// custom events
 		List<CustomEvent__c> customEvents = new List<CustomEvent__c>([
 			SELECT Id, Name, Description__c, StartDateTime__c,
-				EndDateTime__c
+				EndDateTime__c, IsAllDay__c
 			FROM CustomEvent__c
 			WHERE StartDateTime__c >= :startDate
 				AND EndDateTime__c <= :endDate
@@ -61,6 +62,7 @@ public with sharing class CalendarExampleController implements ICalendarItemRetr
 		calItem.Description = e.Description__c;
 		calItem.StartDateTime = e.StartDateTime__c;
 		calItem.EndDateTime = e.EndDateTime__c;
+		calItem.IsAllDay = e.IsAllDay__c;
 		calItem.CssClass = 'custom-event';
 		return calItem;
 	}
