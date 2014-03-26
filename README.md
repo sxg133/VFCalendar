@@ -43,6 +43,14 @@ Display standard or custom events and generic items on a VisualForce calendar.  
 *   __ShowCalendarItemPopup__
 
     Show the popup window when a calendar item is clicked (default = true)
+
+*   __ShowViewSelect__
+
+    Show view selection
+
+*   __SelectedView__
+
+    The active calendar view
     
 #### Basic Implementation
 
