@@ -74,7 +74,7 @@ public with sharing class CalendarHandler {
 		get {
 			for (integer i=0; i<Weeks.size(); i++) {
 				if (Weeks[i].isInWeek(ActiveDate)) {
-					return i;
+					return i+1;
 				}
 			}
 			throw new CalendarException('The active date does not fall within any week.');
@@ -83,7 +83,7 @@ public with sharing class CalendarHandler {
 
 	public CalendarWeek ActiveWeek {
 		get {
-			return Weeks[WeekOfMonth];
+			return Weeks[WeekOfMonth-1];
 		}
 	}
 

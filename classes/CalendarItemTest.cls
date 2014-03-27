@@ -94,5 +94,24 @@ private class CalendarItemTest {
 		Test.stopTest();
 		system.assertEquals('/FAKEID', calItem.DetailUrl);
 	}
+
+	@isTest static void testSort() {
+		CalendarItem calItem1 = new CalendarItem('FAKE1');
+		CalendarItem calItem2 = new CalendarItem('FAKE2');
+		CalendarItem calItem3 = new CalendarItem('FAKE3');
+		calItem1.StartDate = Date.today();
+		calItem2.StartDate = calItem1.StartDate.addDays(4);
+		calItem3.StartDate = calItem1.StartDate.addDays(-4);
+
+		List<CalendarItem> calItems = new List<CalendarItem>{calItem2, calItem3, calItem1};
+
+		Test.startTest();
+			calItems.sort();
+		Test.stopTest();
+
+		system.assertEquals('FAKE3', calItems[0].ItemId, 'The calendar item list did not sort properly.');
+		system.assertEquals('FAKE1', calItems[1].ItemId, 'The calendar item list did not sort properly.');
+		system.assertEquals('FAKE2', calItems[2].ItemId, 'The calendar item list did not sort properly.');
+	}
 	
 }

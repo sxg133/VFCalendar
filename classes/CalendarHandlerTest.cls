@@ -5,17 +5,9 @@
 */
 @isTest
 private class CalendarHandlerTest {
-	
-	static Event createEvent(DateTime startDateTime, DateTime endDateTime, string subject) {
-		Event e = new Event();
-		e.StartDateTime = startDateTime;
-		e.EndDateTime = endDateTime;
-		e.Subject = subject;
-		return e;
-	}
 
 	@isTest static void testNoEvents() {
-		CalendarItemRetriever calItemRetriever = new CalendarItemRetriever();
+		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
 		CalendarHandler calHandler;
 		Test.startTest();
 			calHandler = new CalendarHandler(calItemRetriever);
@@ -30,7 +22,7 @@ private class CalendarHandlerTest {
 	}
 
 	@isTest static void testNavigation() {
-		CalendarItemRetriever calItemRetriever = new CalendarItemRetriever();
+		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
 		CalendarHandler calHandler;
 		Date activeDate = Date.newInstance(2014, 2, 17);
 		Test.startTest();
@@ -123,6 +115,9 @@ private class CalendarHandlerTest {
 			system.assertEquals(2, calHandler.DayOfWeek, 'Incorrect day of week for active date.');
 			system.assertEquals('Monday', calHandler.Weekday, 'Incorrect weekday name for active date.');
 
+			calHandler.setDate( Date.newInstance(2014, 3, 1) );
+			system.assertEquals(1, calHandler.WeekOfMonth, 'The week number of the month for the active date is incorrect.');
+
 		Test.stopTest();
 	}
 
@@ -133,18 +128,18 @@ private class CalendarHandlerTest {
 			Time.newInstance(13, 30, 0, 0)
 			);
 		DateTime endDateTime = startDateTime.addHours(1);
-		Event e1 = createEvent(startDateTime, endDateTime, 'Event 1');
+		Event e1 = CalendarTestHelper.createEvent(startDateTime, endDateTime, 'Event 1');
 
 		startDateTime = DateTime.newInstance(
 			Date.newInstance(2014, 03, 17),
 			Time.newInstance(13, 30, 0, 0)
 			);
 		endDateTime = startDateTime.addHours(1);
-		Event e2 = createEvent(startDateTime, endDateTime, 'Event 2');
+		Event e2 = CalendarTestHelper.createEvent(startDateTime, endDateTime, 'Event 2');
 
 		insert new List<Event>{e1, e2};
 
-		CalendarItemRetriever calItemRetriever = new CalendarItemRetriever();
+		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
 		CalendarHandler calHandler;
 		Test.startTest();
 			calHandler = new CalendarHandler(calItemRetriever);
@@ -201,108 +196,62 @@ private class CalendarHandlerTest {
 		Test.stopTest();
 	}
 
-	// simple test for display controller and properties
-	@isTest static void testCalendarDisplayController() {
+	@isTest static void testItemsAcrossMultipleDays() {
 
 		DateTime startDateTime = DateTime.newInstance(
-			Date.newInstance(2014, 02, 17),
-			Time.newInstance(13, 30, 0, 0)
-			);
-		DateTime endDateTime = startDateTime.addHours(1);
-		Event e1 = createEvent(startDateTime, endDateTime, 'Event 1');
-
-		startDateTime = DateTime.newInstance(
 			Date.newInstance(2014, 03, 17),
 			Time.newInstance(13, 30, 0, 0)
 			);
-		endDateTime = startDateTime.addHours(1);
-		Event e2 = createEvent(startDateTime, endDateTime, 'Event 2');
+		DateTime endDateTime = startDateTime.addDays(2);
+		Event e1 = CalendarTestHelper.createEvent(startDateTime, endDateTime, 'Event 1');
+
+		startDateTime = DateTime.newInstance(
+			Date.newInstance(2014, 03, 20),
+			Time.newInstance(13, 30, 0, 0)
+			);
+		endDateTime = startDateTime.addDays(2);
+		Event e2 = CalendarTestHelper.createEvent(startDateTime, endDateTime, 'Event 2');
+		e2.IsAllDayEvent = true;
 
 		insert new List<Event>{e1, e2};
 
-		CalendarItemRetriever calItemRetriever = new CalendarItemRetriever();
+		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
 		CalendarHandler calHandler;
-
-		CalendarDisplayController cdc;
 		Test.startTest();
-			cdc = new CalendarDisplayController();
 			calHandler = new CalendarHandler(calItemRetriever);
 			calHandler.setDate(e1.StartDateTime.date());
-			cdc.CalHandler = calHandler;
-
-			system.assertEquals(null, cdc.SelectedCalendarItem, 'The selected calendar item should be null if no ID is set.');
-			cdc.SelectedCalendarItemId = e1.Id;
-			system.assertEquals(e1.Id, cdc.SelectedCalendarItem.ItemId, 'Could not retrieve the appropriate calendar item.');
-
-			cdc.goToToday();
-			system.assertEquals(Date.today(), calHandler.ActiveDate, 'The current date was not set in the calendar handler.');
-
-			Date selDate = Date.newInstance(2014, 3, 5);
-			cdc.SelectedDate = selDate;
-			system.assertEquals(cdc.SelectedDate, calHandler.ActiveDate, 'The Selected Date property did not set the calendar handler date.');
-			selDate = Date.newInstance(2014, 3, 4);
-			calHandler.setDate(selDate);
-			system.assertEquals(calHandler.ActiveDate, cdc.SelectedDate, 'Setting the calendar handler date did not update the Selected Date property.');
-
-			// coverage
-			cdc.setSelectedCalendarItem();
 		Test.stopTest();
-	}
 
-	@isTest static void testCalendarProperties() {
-		CalendarParameters cp;
-		Test.startTest();
-			cp = new CalendarParameters();
-		Test.stopTest();
-		system.assert(cp.ShowNavigation, 'The default for show navigation should be true.');
-		system.assert(cp.ShowHeader, 'The default for show header should be true.');
-		system.assert(cp.ShowViewSelect, 'The default for show view select should be true.');
-		system.assert(cp.ShowCalendarItemPopup, 'The default for show item popup should be true.');
+		system.assertEquals(6, calHandler.Items.size(), 'The calendar items were not split correctly.');
+
+		Date startDate = e1.StartDateTime.date();
+		for (integer i=0; i<3; i++) {
+
+			system.assertEquals(
+				e1.Id, 
+				calHandler.Items[i].ItemId, 
+				'The first three calendar Items should have the same ID as event 1.'
+				);
+
+			system.assertEquals(
+				startDate, 
+				calhandler.Items[i].StartDate, 
+				'Calendar item ' + i + ' has an incorrect start date.'
+				);
+
+			startDate = startDate.addDays(1);
+		}
+
 		system.assertEquals(
-			CalendarParameters.CalendarView.MONTH, 
-			cp.SelectedView,
-			'The default for the calendar view should be \'Month\''
+			e1.StartDateTime.date(), 
+			calHandler.Items[0].StartDate, 
+			'The first calendar item should have the same start date as event 1.'
 			);
-	}
-	
-	private class CalendarItemRetriever implements ICalendarItemRetriever {
 
-		/**
-		*	Get calendar items in a date range
-		*
-		*	@param	startDate	The start date (inclusive) to retrieve calendar items for
-		*	@param	endDate		The end date (inclusive) to retrieve calendar items for
-		*
-		*	@return	A list of CalendarItem objects
-		*/
-		public List<CalendarItem> getCalendarItems(Date startDate, Date endDate) {
-			List<CalendarItem> calendarItems = new List<CalendarItem>();
-			List<Event> events = new List<Event>([
-				SELECT Id, Subject, Description, StartDateTime,
-					EndDateTime, IsAllDayEvent
-				FROM Event
-				WHERE StartDateTime >= :startDate
-					AND EndDateTime <= :endDate
-				LIMIT 1000
-				]);
-			for (Event e : events) {
-				calendarItems.add(
-					createCalendarItem(e)
-					);
-			}
-
-			return calendarItems;
-		}
-
-		private CalendarItem createCalendarItem(Event e) {
-			CalendarItem calItem = new CalendarItem(e.Id);
-			calItem.Name = e.Subject;
-			calItem.Description = e.Description;
-			calItem.StartDateTime = e.StartDateTime;
-			calItem.EndDateTime = e.EndDateTime;
-			calItem.IsAllDay = e.IsAllDayEvent;
-			calItem.CssClass = 'standard-event';
-			return calItem;
-		}
+		system.assertEquals(
+			e1.EndDateTime.date(), 
+			calHandler.Items[2].EndDate, 
+			'The third calendar item should have the same end date as event 1'
+			);
 	}
 }
