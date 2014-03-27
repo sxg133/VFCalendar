@@ -76,6 +76,10 @@
 			font-weight: normal;
 		}
 
+		.calendar-all-day-cell {
+			vertical-align: top;
+		}
+
 	</style>
 
 	<apex:outputPanel layout="block" styleClass="calendar-view week" id="calendarWeekView">
@@ -99,7 +103,7 @@
 							All Day
 						</th>
 						<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
-							<td class="calendar-day-cell {!IF(day.CalendarDate == TODAY(), 'calendar-today-cell', '')}">
+							<td class="calendar-day-cell calendar-all-day-cell {!IF(day.CalendarDate == TODAY(), 'calendar-today-cell', '')}">
 								<apex:repeat value="{!day.Items}" var="calItem">
 									<apex:outputPanel layout="block" rendered="{!calItem.IsAllDay}"
 										title="{!calItem.Name}" 
