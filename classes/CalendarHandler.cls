@@ -185,7 +185,7 @@ public with sharing class CalendarHandler {
 			this.Weeks[this.Weeks.size()-1]
 			.Days[NUMBER_OF_DAYS_IN_WEEK-1]
 			.CalendarDate;
-		this.Items = calendarItemRetriever.getCalendarItems(startDate, endDate);
+		this.Items = getCalendarItems(startDate, endDate);
 		for (CalendarWeek week : Weeks) {
 			List<CalendarItem> weekItems = new List<CalendarItem>();
 			for (CalendarItem monthItem : Items) {
@@ -195,6 +195,53 @@ public with sharing class CalendarHandler {
 			}
 			week.Items = weekItems;
 		}
+	}
+
+	private List<CalendarItem> getCalendarItems(Date startDate, Date endDate) {
+		List<CalendarItem> calItems = new List<CalendarItem>();
+		List<CalendarItem> retrievedItems = calendarItemRetriever.getCalendarItems(startDate, endDate);
+		// split items that span across multiple days
+		for (CalendarItem calItem : retrievedItems) {
+			if (calItem.StartDate != calItem.EndDate) {
+				calItems.addAll( splitCalendarItem(calItem) );
+			} else {
+				calItems.add(calItem);
+			}
+		}
+		return calItems;
+	}
+
+	private List<CalendarItem> splitCalendarItem(CalendarItem calItem) {
+		List<CalendarItem> calItems = new List<CalendarItem>();
+
+		CalendarItem firstDayItem = calItem.clone();
+		CalendarItem lastDayItem = calItem.clone();
+
+		firstDayItem.EndDateTime = DateTime.newInstance(
+			firstDayItem.StartDate.addDays(1), 
+			Time.newInstance(0, 0, 0, 0)
+			);
+
+		lastDayItem.StartDateTime = DateTime.newInstance(
+			lastDayItem.EndDate,
+			Time.newInstance(0, 0, 0, 0)
+			);
+
+		calItems.add(firstDayItem);
+
+		Date d = firstDayItem.StartDate.addDays(1);
+		Date endDate = lastDayItem.EndDate;
+		while (d < endDate) {
+			CalendarItem clonedItem = calItem.clone();
+			clonedItem.StartDateTime = DateTime.newInstance(d, Time.newInstance(0,0,0,0));
+			clonedItem.EndDateTime = DateTime.newInstance(d.addDays(1), Time.newInstance(0,0,0,0));
+			calItems.add(clonedItem);
+			d = d.addDays(1);
+		}
+
+		calItems.add(lastDayItem);
+
+		return calItems;
 	}
 
 	/**
