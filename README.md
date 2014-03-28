@@ -101,7 +101,7 @@ Custom events can also be placed on the calendar, but each calendar item returne
 
 #### Calendar Actions
 
-Custom events can be attached to calendar items.  Each custom event is represented as an implementation of the *ICalendarItemAction* interface.
+Custom events can be attached to calendar items.  Each custom event is represented as an implementation of the *CalendarItemAction* interface.
 
 When creating a custom action, you may set or add to the *Actions* property of the calendar item.  The sample code below creates a custom action that switches the CSS class of the calendar item.
 
@@ -130,7 +130,7 @@ When creating a custom action, you may set or add to the *Actions* property of t
     	return calendarItems;
     }
     
-    private class SwitchCalendarItemTypeAction implements ICalendarItemAction {
+    private class SwitchCalendarItemTypeAction implements CalendarItemAction {
 
 		private CalendarItem calItem;
 
