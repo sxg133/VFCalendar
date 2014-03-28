@@ -78,7 +78,7 @@ public with sharing class CalendarExampleController implements CalendarItemRetri
 		return calItem;
 	}
 
-	private class SwitchCalendarItemTypeAction implements ICalendarItemAction {
+	private class SwitchCalendarItemTypeAction implements CalendarItemAction {
 
 		private CalendarItem calItem;
 

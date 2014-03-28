@@ -114,7 +114,7 @@ public with sharing virtual class CalendarItem implements Comparable {
 		}
 	}
 
-	public List<ICalendarItemAction> Actions {get; set;}
+	public List<CalendarItemAction> Actions {get; set;}
 	public string CssClass {get; set;}
 	public string DetailUrl {get; set;}
 
@@ -124,10 +124,10 @@ public with sharing virtual class CalendarItem implements Comparable {
 	private DateTime itemEndDateTime;
 
 	public CalendarItem(string itemId) {
-		this(itemId, new List<ICalendarItemAction>());
+		this(itemId, new List<CalendarItemAction>());
 	}
 
-	public CalendarItem(string itemId, List<ICalendarItemAction> actions) {
+	public CalendarItem(string itemId, List<CalendarItemAction> actions) {
 		this.ItemId = itemId;
 		this.Actions = actions;
 		this.DetailUrl = '/' + this.ItemId;
