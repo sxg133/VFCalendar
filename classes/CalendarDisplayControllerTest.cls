@@ -28,7 +28,7 @@ private class CalendarDisplayControllerTest {
 
 		insert new List<Event>{e1, e2};
 
-		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
+		CalendarTestHelper.StandardEventRetriever calItemRetriever = new CalendarTestHelper.StandardEventRetriever();
 		CalendarHandler calHandler;
 
 		CalendarDisplayController cdc;
@@ -59,7 +59,7 @@ private class CalendarDisplayControllerTest {
 
 	@isTest static void testUnitNavigation() {
 
-		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
+		CalendarTestHelper.StandardEventRetriever calItemRetriever = new CalendarTestHelper.StandardEventRetriever();
 		CalendarHandler calHandler;
 
 		Date startDate = Date.newInstance(2014, 3, 26);

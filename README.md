@@ -56,7 +56,7 @@ Display standard or custom events and generic items on a VisualForce calendar.  
 
 An example controller for the VisualForce page that contains the Calendar Display component:
 
-    public with sharing MyPageController implements ICalendarItemRetriever {
+    public with sharing MyPageController implements CalendarItemRetriever {
 
         public CalendarHandler cal {get; private set;}
     	public CalendarParameters calParams {get; private set;}
@@ -72,7 +72,7 @@ An example controller for the VisualForce page that contains the Calendar Displa
     
     }
     
-The *CalendarHandler* constructor accepts an instance of the *ICalendarItemRetriever* interface.  The interface's only method is *getCalendarItems*.  This method accepts a date range, and returns a list of *CalendarItem* objects.  Below is an example of creating a list of calendar items from standard SalesForce events.
+The *CalendarHandler* constructor accepts an instance of the *CalendarItemRetriever* interface.  The interface's only method is *getCalendarItems*.  This method accepts a date range, and returns a list of *CalendarItem* objects.  Below is an example of creating a list of calendar items from standard SalesForce events.
 
     public List<CalendarItem> getCalendarItems(Date startDate, Date endDate) {
     	List<CalendarItem> calendarItems = new List<CalendarItem>();

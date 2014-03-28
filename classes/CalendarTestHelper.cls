@@ -14,7 +14,7 @@ public class CalendarTestHelper {
 		return e;
 	}
 	
-	public class CalendarItemRetriever implements ICalendarItemRetriever {
+	public class StandardEventRetriever implements CalendarItemRetriever {
 
 		/**
 		*	Get calendar items in a date range

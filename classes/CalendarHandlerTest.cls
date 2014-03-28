@@ -7,7 +7,7 @@
 private class CalendarHandlerTest {
 
 	@isTest static void testNoEvents() {
-		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
+		CalendarTestHelper.StandardEventRetriever calItemRetriever = new CalendarTestHelper.StandardEventRetriever();
 		CalendarHandler calHandler;
 		Test.startTest();
 			calHandler = new CalendarHandler(calItemRetriever);
@@ -22,7 +22,7 @@ private class CalendarHandlerTest {
 	}
 
 	@isTest static void testNavigation() {
-		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
+		CalendarTestHelper.StandardEventRetriever calItemRetriever = new CalendarTestHelper.StandardEventRetriever();
 		CalendarHandler calHandler;
 		Date activeDate = Date.newInstance(2014, 2, 17);
 		Test.startTest();
@@ -139,7 +139,7 @@ private class CalendarHandlerTest {
 
 		insert new List<Event>{e1, e2};
 
-		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
+		CalendarTestHelper.StandardEventRetriever calItemRetriever = new CalendarTestHelper.StandardEventRetriever();
 		CalendarHandler calHandler;
 		Test.startTest();
 			calHandler = new CalendarHandler(calItemRetriever);
@@ -215,7 +215,7 @@ private class CalendarHandlerTest {
 
 		insert new List<Event>{e1, e2};
 
-		CalendarTestHelper.CalendarItemRetriever calItemRetriever = new CalendarTestHelper.CalendarItemRetriever();
+		CalendarTestHelper.StandardEventRetriever calItemRetriever = new CalendarTestHelper.StandardEventRetriever();
 		CalendarHandler calHandler;
 		Test.startTest();
 			calHandler = new CalendarHandler(calItemRetriever);

@@ -3,7 +3,7 @@
 *
 *	@author	Sahil Grover	<sgrover@acumensolutions.com>
 */
-public with sharing class CalendarExampleController implements ICalendarItemRetriever {
+public with sharing class CalendarExampleController implements CalendarItemRetriever {
 
 	public CalendarHandler Cal {get; private set;}
 	public CalendarParameters CalParams {get; private set;}

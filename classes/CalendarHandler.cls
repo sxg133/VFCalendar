@@ -90,7 +90,7 @@ public with sharing class CalendarHandler {
 	public List<CalendarWeek> Weeks {get; private set;}
 	public List<CalendarItem> Items {get; private set;}
 
-	private ICalendarItemRetriever calendarItemRetriever;
+	private CalendarItemRetriever calendarItemRetriever;
 
 	static {
 		// set up day hour blocks
@@ -106,11 +106,11 @@ public with sharing class CalendarHandler {
 		} while (t != startDay);
 	}
 
-	public CalendarHandler(ICalendarItemRetriever calendarItemRetriever) {
+	public CalendarHandler(CalendarItemRetriever calendarItemRetriever) {
 		this(calendarItemRetriever, Date.today());
 	}
 
-	public CalendarHandler(ICalendarItemRetriever calendarItemRetriever, Date activeDate) {
+	public CalendarHandler(CalendarItemRetriever calendarItemRetriever, Date activeDate) {
 		this.calendarItemRetriever = calendarItemRetriever;
 		setDate(activeDate);
 	}
