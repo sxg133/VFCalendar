@@ -222,20 +222,21 @@ private class CalendarHandlerTest {
 			calHandler.setDate(e1.StartDateTime.date());
 		Test.stopTest();
 
-		system.assertEquals(6, calHandler.Items.size(), 'The calendar items were not split correctly.');
+		system.assertEquals(6, calHandler.SplitItems.size(), 'The calendar items were not split correctly.');
+		system.assertEquals(2, calHandler.Items.size(), 'The calendar items should be separate from the split items.');
 
 		Date startDate = e1.StartDateTime.date();
 		for (integer i=0; i<3; i++) {
 
 			system.assertEquals(
 				e1.Id, 
-				calHandler.Items[i].ItemId, 
+				calHandler.SplitItems[i].ItemId, 
 				'The first three calendar Items should have the same ID as event 1.'
 				);
 
 			system.assertEquals(
 				startDate, 
-				calhandler.Items[i].StartDate, 
+				calhandler.SplitItems[i].StartDate, 
 				'Calendar item ' + i + ' has an incorrect start date.'
 				);
 
@@ -244,13 +245,13 @@ private class CalendarHandlerTest {
 
 		system.assertEquals(
 			e1.StartDateTime.date(), 
-			calHandler.Items[0].StartDate, 
+			calHandler.SplitItems[0].StartDate, 
 			'The first calendar item should have the same start date as event 1.'
 			);
 
 		system.assertEquals(
 			e1.EndDateTime.date(), 
-			calHandler.Items[2].EndDate, 
+			calHandler.SplitItems[2].EndDate, 
 			'The third calendar item should have the same end date as event 1'
 			);
 	}

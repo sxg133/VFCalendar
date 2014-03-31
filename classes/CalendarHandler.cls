@@ -89,6 +89,7 @@ public with sharing class CalendarHandler {
 
 	public List<CalendarWeek> Weeks {get; private set;}
 	public List<CalendarItem> Items {get; private set;}
+	public List<CalendarItem> SplitItems {get; private set;}	// Items split for multiple day events
 
 	private CalendarItemRetriever calendarItemRetriever;
 
@@ -185,10 +186,11 @@ public with sharing class CalendarHandler {
 			this.Weeks[this.Weeks.size()-1]
 			.Days[NUMBER_OF_DAYS_IN_WEEK-1]
 			.CalendarDate;
-		this.Items = getCalendarItems(startDate, endDate);
+		this.Items = calendarItemRetriever.getCalendarItems(startDate, endDate);
+		this.SplitItems = getSplitCalendarItems(this.Items);
 		for (CalendarWeek week : Weeks) {
 			List<CalendarItem> weekItems = new List<CalendarItem>();
-			for (CalendarItem monthItem : Items) {
+			for (CalendarItem monthItem : SplitItems) {
 				if (monthItem.StartDate >= week.StartDate && monthItem.EndDate <= week.EndDate) {
 					weekItems.add(monthItem);
 				}
@@ -197,9 +199,8 @@ public with sharing class CalendarHandler {
 		}
 	}
 
-	private List<CalendarItem> getCalendarItems(Date startDate, Date endDate) {
+	private List<CalendarItem> getSplitCalendarItems(List<CalendarItem> retrievedItems) {
 		List<CalendarItem> calItems = new List<CalendarItem>();
-		List<CalendarItem> retrievedItems = calendarItemRetriever.getCalendarItems(startDate, endDate);
 		// split items that span across multiple days
 		for (CalendarItem calItem : retrievedItems) {
 			if (calItem.StartDate != calItem.EndDate) {
