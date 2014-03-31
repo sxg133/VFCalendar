@@ -249,11 +249,18 @@
 				<div class="calendar-line"></div>
 
 				<p>
-					<apex:outputText value="{!SelectedCalendarItem.FormattedStartDateTime}" />
-					<apex:outputText value=" to {!SelectedCalendarItem.FormattedEndDateTime}" 
-						rendered="{!SelectedCalendarItem.StartDate <> SelectedCalendarItem.EndDate}" />
-					<apex:outputText value=" to {!SelectedCalendarItem.FormattedEndTime}" 
-						rendered="{!SelectedCalendarItem.StartDate == SelectedCalendarItem.EndDate}" />
+					<apex:variable value="{!SelectedCalendarItem.IsAllDay}" var="isAllDay" rendered="{!NOT(SelectedCalendarItem.IsAllDay)}" >
+						<apex:outputText value="{!SelectedCalendarItem.FormattedStartDateTime}" />
+						<apex:outputText value=" to {!SelectedCalendarItem.FormattedEndDateTime}" 
+							rendered="{!SelectedCalendarItem.StartDate <> SelectedCalendarItem.EndDate}" />
+						<apex:outputText value=" to {!SelectedCalendarItem.FormattedEndTime}" 
+							rendered="{!SelectedCalendarItem.StartDate == SelectedCalendarItem.EndDate}" />
+					</apex:variable>
+					<apex:variable value="{!SelectedCalendarItem.IsAllDay}" var="isAllDay" rendered="{!SelectedCalendarItem.IsAllDay}" >
+						<apex:outputText value="{!SelectedCalendarItem.FormattedStartDate}" />
+						<apex:outputText value=" to {!SelectedCalendarItem.FormattedEndDate}" 
+							rendered="{!SelectedCalendarItem.StartDate <> SelectedCalendarItem.EndDate}" />
+					</apex:variable>
 				</p>
 
 				<p>
