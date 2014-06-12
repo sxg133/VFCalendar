@@ -117,21 +117,68 @@ public with sharing class CalendarHandler {
 	}
 
 	/**
-	*	Add years to the active calendar date
-	*
-	*	@param	numberOfYears	The number of years to add to the active date
+	*	Go to the next day
 	*/
-	public void addYears(integer numberOfYears) {
-		setDate(this.ActiveDate.addYears(numberOfYears));
+	public void goToNextDay() {
+		this.addDays(1);
 	}
 
 	/**
-	*	Add months to the active calendar date
-	*
-	*	@param	numberOfMonths	The number of months to add to the active date
+	*	Go to the previous day
 	*/
-	public void addMonths(integer numberOfMonths) {
-		setDate(this.ActiveDate.addMonths(numberOfMonths));
+	public void goToPreviousDay() {
+		this.addDays(-1);
+	}
+
+	/**
+	*	Go to the next week
+	*/
+	public void goToNextWeek() {
+		this.addWeeks(1);
+	}
+
+	/**
+	*	Go to the previous week
+	*/
+	public void goToPreviousWeek() {
+		this.addWeeks(-1);
+	}
+
+	/**
+	*	Go to the next month
+	*/
+	public void goToNextMonth() {
+		this.addMonths(1);
+	}
+
+	/**
+	*	Go to the previous month
+	*/
+	public void goToPreviousMonth() {
+		this.addMonths(-1);
+	}
+
+	/**
+	*	Go to the next year
+	*/
+	public void goToNextYear() {
+		this.addYears(1);
+	}
+
+	/**
+	*	Go to the previous year
+	*/
+	public void goToPreviousYear() {
+		this.addYears(-1);
+	}
+
+	/**
+	*	Add days to the active calendar date
+	*
+	*	@param	numberOfDays	The number of days to add to the active date
+	*/
+	public void addDays(integer numberOfDays) {
+		setDate(this.ActiveDate.addDays(numberOfDays));
 	}
 
 	/**
@@ -144,12 +191,21 @@ public with sharing class CalendarHandler {
 	}
 
 	/**
-	*	Add days to the active calendar date
+	*	Add months to the active calendar date
 	*
-	*	@param	numberOfDays	The number of days to add to the active date
+	*	@param	numberOfMonths	The number of months to add to the active date
 	*/
-	public void addDays(integer numberOfDays) {
-		setDate(this.ActiveDate.addDays(numberOfDays));
+	public void addMonths(integer numberOfMonths) {
+		setDate(this.ActiveDate.addMonths(numberOfMonths));
+	}
+
+	/**
+	*	Add years to the active calendar date
+	*
+	*	@param	numberOfYears	The number of years to add to the active date
+	*/
+	public void addYears(integer numberOfYears) {
+		setDate(this.ActiveDate.addYears(numberOfYears));
 	}
 
 	/**
@@ -243,62 +299,6 @@ public with sharing class CalendarHandler {
 		calItems.add(lastDayItem);
 
 		return calItems;
-	}
-
-	/**
-	*	Go to the next day
-	*/
-	public void goToNextDay() {
-		this.addDays(1);
-	}
-
-	/**
-	*	Go to the previous day
-	*/
-	public void goToPreviousDay() {
-		this.addDays(-1);
-	}
-
-	/**
-	*	Go to the next week
-	*/
-	public void goToNextWeek() {
-		this.addWeeks(1);
-	}
-
-	/**
-	*	Go to the previous week
-	*/
-	public void goToPreviousWeek() {
-		this.addWeeks(-1);
-	}
-
-	/**
-	*	Go to the next month
-	*/
-	public void goToNextMonth() {
-		this.addMonths(1);
-	}
-
-	/**
-	*	Go to the previous month
-	*/
-	public void goToPreviousMonth() {
-		this.addMonths(-1);
-	}
-
-	/**
-	*	Go to the next year
-	*/
-	public void goToNextYear() {
-		this.addYears(1);
-	}
-
-	/**
-	*	Go to the previous year
-	*/
-	public void goToPreviousYear() {
-		this.addYears(-1);
 	}
 
 	/**
