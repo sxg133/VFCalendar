@@ -1,4 +1,4 @@
-<apex:component>
+<apex:component >
 	<apex:attribute name="cal" description="The calendar to display" type="CalendarHandler" required="true" />
 
 	<style type="text/css">
@@ -146,7 +146,8 @@
 							<div class="calendar-hour-container">
 								<apex:repeat value="{!day.HalfHourItems}" var="halfHour">
 									<apex:outputPanel layout="block" 
-										styleClass="calendar-time-block {!IF(halfHour.IsOnHour, 'calendar-hour', 'calendar-half-hour')}">
+										styleClass="calendar-time-block {!IF(halfHour.IsOnHour, 'calendar-hour', 'calendar-half-hour')}"
+										onclick="calendarClient.emptySlotClicked(event);">
 										<apex:variable var="left" value="0" />
 										<apex:repeat value="{!halfHour.Items}" var="calItem">
 											<apex:outputPanel layout="block" rendered="{!NOT(calItem.IsAllDay)}" 
@@ -155,7 +156,7 @@
 												styleClass="calendar-item {!HTMLENCODE(calItem.CssClass)}"
 												onclick="calendarClient.calendarItemClicked(event, '{!calItem.ItemId}');">
 
-												<a href="{!calItem.DetailUrl}" target="_blank" title="{!calItem.Name}">
+												<a href="{!calItem.DetailUrl}" target="_blank" title="{!calItem.Name}" onclick="calendarClient.sfone.navigateToCalendarItem(event, '{!calItem.MobileUrl}', '{!calItem.ItemId}');">
 													<apex:outputText value="{!calItem.Name}" />
 												</a>
 

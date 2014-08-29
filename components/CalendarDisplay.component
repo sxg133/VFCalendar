@@ -241,7 +241,7 @@
 				</h2>
 
 				<span class="calendar-detail-link">
-					<a href="{!SelectedCalendarItem.DetailUrl}" alt="More Details for {!SelectedCalendarItem.Name}" target="_blank">
+					<a href="{!SelectedCalendarItem.DetailUrl}" alt="More Details for {!SelectedCalendarItem.Name}" target="_blank" onclick="calendarClient.sfone.navigateToCalendarItem(event, '{!SelectedCalendarItem.MobileUrl}', '{!SelectedCalendarItem.ItemId}');">
 							Details
 						</a>
 				</span>
@@ -293,9 +293,7 @@
 
 	<script type="text/javascript">
 
-		var calendarUtil = calendarUtil || {};
-
-		(function() {
+		var calendarUtil = (function(calendarUtil) {
 
 			calendarUtil.clearChildren = function(parent) {
 				while (parent.lastChild) {
@@ -344,11 +342,10 @@
 
 			calendarUtil.fixDateInput('{!$Component.selectedDateInput}');
 
-		})();
+			return calendarUtil;
+		})(calendarUtil || {});
 
-		var calendarClient = calendarClient || {};
-
-		(function() {
+		var calendarClient = (function(calendarClient) {
 			// setup calendar popup
 			calendarClient.calendarItemPopup = document.getElementById('{!$Component.calendarItemPopup}');
 			calendarClient.calendarItemPopupLoader = document.getElementById('calendar-item-popup-loader');
@@ -438,11 +435,43 @@
 				e.stopPropagation();
 			}
 
+			calendarClient.emptySlotClicked = function(e) {
+				// TODO : IMPLEMENT CREATE FUNCTIONALITY
+			}
+
 			// hide if body is clicked outside of popup
 			document.getElementsByTagName('body')[0].addEventListener('click', function() {
 				calendarClient.hideCalendarItemPopup();
 			});
-		})();
+
+			return calendarClient;
+		})(calendarClient || {});
+
+		calendarClient.sfone = (function(sfone) {
+
+			sfone.isSalesforceOne = function() {
+				return typeof(sforce) !== 'undefined';
+			};
+
+			sfone.navigateToCalendarItem = function(e, mobileUrl, itemId) {
+				if (!sfone.isSalesforceOne()) {
+					return;
+				}
+
+				if (mobileUrl || itemId) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+
+				if (mobileUrl) {
+					sforce.one.navigateToURL(mobileUrl);
+				} else if (itemId) {
+					sforce.one.navigateToSObject(itemId);
+				}
+			};
+
+			return sfone;
+		})(calendarClient.sfone || {});
 
 	</script>
 
