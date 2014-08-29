@@ -16,7 +16,7 @@ public with sharing class CalendarParameters {
 	public CalendarView SelectedView {get; set;}		// The selected calendar view
 	public boolean ShowCalendarItemPopup {get; set;}	// Show the calendar item popup when a user clicks an event
 
-	public string SelectedViewName {
+	public String SelectedViewName {
 		get {
 			return SelectedView.name();
 		}

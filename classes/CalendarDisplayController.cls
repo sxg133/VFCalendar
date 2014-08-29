@@ -6,8 +6,8 @@
 public with sharing class CalendarDisplayController {
 	public CalendarHandler CalHandler {get; set;}
 	public CalendarParameters CalParams {get; set;}
-	public string SelectedCalendarItemId {get; set;}
-	public string ViewSelection {get; set;}
+	public String SelectedCalendarItemId {get; set;}
+	public String ViewSelection {get; set;}
 	public CalendarItem SelectedCalendarItem {
 		get {
 			try {

@@ -89,9 +89,9 @@ public with sharing class CalendarExampleController implements CalendarItemRetri
 		/**
 		*	Retrieve the label for the custom calendar action
 		*
-		*	@return	The string label for the calendar action
+		*	@return	The String label for the calendar action
 		*/
-		public string getActionLabel() {
+		public String getActionLabel() {
 			return 'Switch Type';
 		}
 

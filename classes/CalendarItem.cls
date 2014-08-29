@@ -5,9 +5,9 @@
 */
 public with sharing virtual class CalendarItem implements Comparable {
 
-	public string ItemId {get; private set;}
-	public string Name {get; set;}
-	public string Description {get; set;}
+	public String ItemId {get; private set;}
+	public String Name {get; set;}
+	public String Description {get; set;}
 
 	public DateTime StartDateTime {
 		get {
@@ -19,19 +19,19 @@ public with sharing virtual class CalendarItem implements Comparable {
 		}
 	}
 
-	public string FormattedStartDateTime {
+	public String FormattedStartDateTime {
 		get {
 			return StartDateTime.format('MMMM d, h:mm a');
 		}
 	}
 
-	public string FormattedStartDate {
+	public String FormattedStartDate {
 		get {
 			return StartDateTime.format('MMMM d');
 		}
 	}
 
-	public string FormattedStartTime {
+	public String FormattedStartTime {
 		get {
 			return StartDateTime.format('h:mm a');
 		}
@@ -47,19 +47,19 @@ public with sharing virtual class CalendarItem implements Comparable {
 		}
 	}
 
-	public string FormattedEndDateTime {
+	public String FormattedEndDateTime {
 		get {
 			return EndDateTime.format('MMMM d, h:mm a');
 		}
 	}
 
-	public string FormattedEndDate {
+	public String FormattedEndDate {
 		get {
 			return EndDateTime.format('MMMM d');
 		}
 	}
 
-	public string FormattedEndTime {
+	public String FormattedEndTime {
 		get {
 			return EndDateTime.format('h:mm a');
 		}
@@ -115,22 +115,28 @@ public with sharing virtual class CalendarItem implements Comparable {
 	}
 
 	public List<CalendarItemAction> Actions {get; set;}
-	public string CssClass {get; set;}
-	public string DetailUrl {get; set;}
+	public String CssClass {get; set;}
+	public String DetailUrl {get; set;}
+	public String MobileUrl {get; set;}	// if mobile url is null, sobject is assumed; sforce.one.navigateToSObject
 
 	private Date itemStartDate;
 	private DateTime itemStartDateTime;
 	private Date itemEndDate;
 	private DateTime itemEndDateTime;
 
-	public CalendarItem(string itemId) {
+	public CalendarItem() {
+		
+	}
+
+	public CalendarItem(String itemId) {
 		this(itemId, new List<CalendarItemAction>());
 	}
 
-	public CalendarItem(string itemId, List<CalendarItemAction> actions) {
+	public CalendarItem(String itemId, List<CalendarItemAction> actions) {
 		this.ItemId = itemId;
 		this.Actions = actions;
 		this.DetailUrl = '/' + this.ItemId;
+		this.MobileUrl = null;
 		this.IsAllDay = false;
 	}
 

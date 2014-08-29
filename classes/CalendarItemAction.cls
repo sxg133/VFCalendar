@@ -8,9 +8,9 @@ public interface CalendarItemAction {
     /**
     *   Retrieve the label for the custom calendar action
     *
-    *   @return The string label for the calendar action
+    *   @return The String label for the calendar action
     */
-    string getActionLabel();
+    String getActionLabel();
 
     /**
     *   Should the calendar reload after performing the action

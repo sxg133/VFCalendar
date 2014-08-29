@@ -6,7 +6,7 @@
 @isTest
 public class CalendarTestHelper {
 	
-	public static Event createEvent(DateTime startDateTime, DateTime endDateTime, string subject) {
+	public static Event createEvent(DateTime startDateTime, DateTime endDateTime, String subject) {
 		Event e = new Event();
 		e.StartDateTime = startDateTime;
 		e.EndDateTime = endDateTime;

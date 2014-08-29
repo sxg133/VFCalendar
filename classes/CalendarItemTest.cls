@@ -85,12 +85,12 @@ private class CalendarItemTest {
 			calItem.CssClass = 'fakecss';
 			calItem.StartDateTime = DateTime.now();
 			calItem.EndDateTime = calItem.StartDateTime.addHours(1);
-			string endDateTime = calItem.FormattedEndDateTime;
-			string endDate = calItem.FormattedEndDate;
-			string endTime = calItem.FormattedEndTime;
-			string startDateTime = calItem.FormattedStartDateTime;
-			string startDate = calItem.FormattedStartDate;
-			string startTime = calItem.FormattedStartTime;
+			String endDateTime = calItem.FormattedEndDateTime;
+			String endDate = calItem.FormattedEndDate;
+			String endTime = calItem.FormattedEndTime;
+			String startDateTime = calItem.FormattedStartDateTime;
+			String startDate = calItem.FormattedStartDate;
+			String startTime = calItem.FormattedStartTime;
 		Test.stopTest();
 		system.assertEquals('/FAKEID', calItem.DetailUrl);
 	}

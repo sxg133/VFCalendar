@@ -7,7 +7,7 @@ public with sharing class CalendarHandler {
 
 	private static final integer NUMBER_OF_DAYS_IN_WEEK = 7;
 
-	private static final string[] weekdays = new string[]{
+	private static final String[] weekdays = new String[]{
 		'Sunday',
 		'Monday',
 		'Tuesday',
@@ -20,7 +20,7 @@ public with sharing class CalendarHandler {
 	// can't make this Time[] because VF won't render it properly
 	private static final DateTime[] DAY_HOUR_BLOCKS;
 
-	public string[] WeekdayNames {
+	public String[] WeekdayNames {
 		get {
 			return weekdays;
 		}
@@ -64,7 +64,7 @@ public with sharing class CalendarHandler {
 		}
 	}
 
-	public string Weekday {
+	public String Weekday {
 		get {
 			return weekdays[this.DayOfWeek - 1];
 		}
@@ -308,7 +308,7 @@ public with sharing class CalendarHandler {
 	*
 	*	@return	Returns the calendar item matching the ID
 	*/
-	public CalendarItem getCalendarItem(string itemId) {
+	public CalendarItem getCalendarItem(String itemId) {
 		for (CalendarItem item : Items) {
 			if (item.ItemId == itemId) {
 				return item;
