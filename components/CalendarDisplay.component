@@ -337,7 +337,9 @@
 
 			calendarUtil.fixDateInput = function(dateElementId) {
 				var dateElement = document.getElementById(dateElementId);
-				dateElement.value = calendarUtil.formatSalesforceDateString(dateElement.value);
+				if (dateElement) {
+					dateElement.value = calendarUtil.formatSalesforceDateString(dateElement.value);
+				}
 			};
 
 			calendarUtil.fixDateInput('{!$Component.selectedDateInput}');
