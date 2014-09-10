@@ -99,9 +99,7 @@
 						</apex:repeat>
 					</tr>
 					<tr class="calendar-header-row">
-						<th class="calendar-time-cell">
-							All Day
-						</th>
+						<th class="calendar-time-cell"></th>
 						<apex:repeat value="{!cal.ActiveWeek.Days}" var="day">
 							<td class="calendar-day-cell calendar-all-day-cell {!IF(day.CalendarDate == TODAY(), 'calendar-today-cell', '')}">
 								<apex:repeat value="{!day.Items}" var="calItem">
@@ -132,7 +130,7 @@
 						<div class="calendar-hour-container">
 							<apex:repeat value="{!cal.DayHourBlocks}" var="hour">
 								<div class="calendar-time-block calendar-hour">
-									<apex:outputText value="{0,date,h:mm a}">
+									<apex:outputText value="{0,date,h a}">
 										<apex:param value="{!hour}" />
 									</apex:outputText>
 								</div>
