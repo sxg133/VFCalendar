@@ -1,7 +1,7 @@
 /**
 *	Controller for Calendar Display component
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 public with sharing class CalendarDisplayController {
 	public CalendarHandler CalHandler {get; set;}

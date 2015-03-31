@@ -1,7 +1,7 @@
 /**
 *	Holds information for the date range being viewed on a calendar
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 public with sharing class CalendarHandler {
 

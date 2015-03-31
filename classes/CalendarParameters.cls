@@ -1,7 +1,7 @@
 /**
 *	Parameters for a Calendar display
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 public with sharing class CalendarParameters {
 

@@ -1,7 +1,7 @@
 /**
 *	Test for calendar item class
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 @isTest
 private class CalendarItemTest {

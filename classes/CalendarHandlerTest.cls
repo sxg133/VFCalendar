@@ -1,7 +1,7 @@
 /**
 *	Test class for the calendar handler
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 @isTest
 private class CalendarHandlerTest {

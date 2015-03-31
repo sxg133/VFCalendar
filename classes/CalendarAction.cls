@@ -1,7 +1,7 @@
 /**
 *	Interface for executing a custom calendar event
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 public interface CalendarAction {
 

@@ -1,7 +1,7 @@
 /**
 *	Test for calendar display controller
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 @isTest
 private class CalendarDisplayControllerTest {

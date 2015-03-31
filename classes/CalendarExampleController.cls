@@ -1,7 +1,7 @@
 /**
 *	Controller for calendar component demo
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 public with sharing class CalendarExampleController implements CalendarItemRetriever {
 

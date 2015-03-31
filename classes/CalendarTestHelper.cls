@@ -1,7 +1,7 @@
 /**
 *	Helper class for calendar tests
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 @isTest
 public class CalendarTestHelper {

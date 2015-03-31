@@ -1,7 +1,7 @@
 /**
 *	An item to display on the calendar viewer component
 *
-*	@author	Sahil Grover	<sgrover@acumensolutions.com>
+*	@author	Sahil Grover 
 */
 public with sharing virtual class CalendarItem implements Comparable {
 
